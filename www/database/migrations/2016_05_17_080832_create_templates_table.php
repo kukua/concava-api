@@ -9,13 +9,13 @@ class CreateTemplatesTable extends Migration
 	{
 		Schema::create('templates', function (Blueprint $table) {
 			$table->increments('id');
-			$table->integer('user_id')->unsigned()->default(0);
+			$table->integer('user_id')->unsigned()->nullable();
 			$table->string('name');
 			$table->timestamps();
 
 			$table->foreign('user_id')
 				->references('id')->on('users')
-				->onDelete('set default');
+				->onDelete('set null');
 		});
 	}
 
