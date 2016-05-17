@@ -2,6 +2,8 @@
 
 namespace App\Models\Database;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Validator extends Model
 {
 	public static $rules = [

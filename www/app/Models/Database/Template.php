@@ -2,6 +2,8 @@
 
 namespace App\Models\Database;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Template extends Model
 {
 	public static $rules = [
@@ -19,5 +21,10 @@ class Template extends Model
 	public function devices ()
 	{
 		return $this->hasMany(Device::class);
+	}
+
+	public function attributes ()
+	{
+		return $this->hasMany(Attribute::class);
 	}
 }

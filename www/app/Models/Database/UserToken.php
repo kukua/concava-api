@@ -2,6 +2,8 @@
 
 namespace App\Models\Database;
 
+use Illuminate\Database\Eloquent\Model;
+
 class UserToken extends Model
 {
 	public static $rules = [
@@ -11,13 +13,13 @@ class UserToken extends Model
 	protected $fillable = ['token'];
 	public $timestamps = true;
 
+	public static function randomToken ()
+	{
+		return bin2hex(openssl_random_pseudo_bytes(16));
+	}
+
 	public function user ()
 	{
 		return $this->belongsTo(User::class, 'user_devices');
-	}
-
-	public function getRandomTokenAttribute ()
-	{
-		return bin2hex(openssl_random_pseudo_bytes(16));
 	}
 }

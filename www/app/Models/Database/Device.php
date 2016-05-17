@@ -2,6 +2,8 @@
 
 namespace App\Models\Database;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Device extends Model
 {
 	public static $rules = [
@@ -20,10 +22,5 @@ class Device extends Model
 	public function template ()
 	{
 		return $this->hasOne(Template::class);
-	}
-
-	public function tokens ()
-	{
-		return $this->hasMany(UserToken::class);
 	}
 }
