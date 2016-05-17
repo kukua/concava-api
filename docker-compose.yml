@@ -1,6 +1,5 @@
 laravel:
     build: .
-    env_file: .env
     volumes:
         - ./www/:/www
     links:
@@ -21,7 +20,7 @@ nginx:
         - laravel
 mariadb:
     image: mariadb:10.1
-    env_file: .env
+    env_file: www/.env
     environment:
         # Fix https://goo.gl/fUTycl
         MYSQL_HOST:

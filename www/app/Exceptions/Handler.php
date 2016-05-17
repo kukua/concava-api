@@ -11,40 +11,71 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
-    /**
-     * A list of the exception types that should not be reported.
-     *
-     * @var array
-     */
-    protected $dontReport = [
-        AuthorizationException::class,
-        HttpException::class,
-        ModelNotFoundException::class,
-        ValidationException::class,
-    ];
+	/**
+	 * A list of the exception types that should not be reported.
+	 *
+	 * @var array
+	 */
+	protected $dontReport = [
+		AuthorizationException::class,
+		HttpException::class,
+		ModelNotFoundException::class,
+		ValidationException::class,
+	];
 
-    /**
-     * Report or log an exception.
-     *
-     * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception  $e
-     * @return void
-     */
-    public function report(Exception $e)
-    {
-        parent::report($e);
-    }
+	/**
+	 * Report or log an exception.
+	 *
+	 * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
+	 *
+	 * @param  \Exception  $e
+	 * @return void
+	 */
+	public function report (Exception $e)
+	{
+		parent::report($e);
+	}
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $e
-     * @return \Illuminate\Http\Response
-     */
-    public function render($request, Exception $e)
-    {
-        return parent::render($request, $e);
-    }
+	/**
+	 * Render an exception into an HTTP response.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Exception  $e
+	 * @return \Illuminate\Http\Response
+	 */
+	public function render ($request, Exception $e)
+	{
+		if ($this->isHttpException($e))
+		{
+			return $this->renderHttpException($e);
+		}
+		else
+		{
+			return parent::render($request, $e);
+		}
+	}
+
+	/**
+	 * Render the given HttpException.
+	 *
+	 * @param  \Symfony\Component\HttpKernel\Exception\HttpException  $e
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	protected function renderHttpException (HttpException $e)
+	{
+		$error = [
+			'status' => $e->getStatusCode(),
+			'code' => $e->getCode(),
+			'detail' => $e->getMessage()
+		];
+		if (\Config::get('app.debug'))
+		{
+			$error['meta'] = [
+				'file' => $e->getFile(),
+				'line' => $e->getLine(),
+				'trace' => $e->getTraceAsString()
+			];
+		}
+		return response()->json([ 'errors' => $error ], $e->getStatusCode());
+	}
 }
