@@ -2,19 +2,19 @@
 
 namespace App\Model\Api;
 
-use App\Model\Database\Device;
+use App\Model\Database\Calibrator;
 use NilPortugues\Api\Mappings\JsonApiMapping;
 
-class DeviceTransformer implements JsonApiMapping
+class CalibratorTransformer implements JsonApiMapping
 {
 	public function getClass()
 	{
-		return Device::class;
+		return Calibrator::class;
 	}
 
 	public function getAlias()
 	{
-		return 'device';
+		return 'calibrator';
 	}
 
 	public function getAliasedProperties()
@@ -35,13 +35,13 @@ class DeviceTransformer implements JsonApiMapping
 	public function getUrls()
 	{
 		return [
-			'self' => ['name' => 'devices.show', 'as_id' => 'id'],
-			'devices' => ['name' => 'devices.index']
+			'self' => ['name' => 'calibrators.show', 'as_id' => 'id'],
+			'calibrators' => ['name' => 'calibrators.index']
 		];
 	}
 
 	public function getRelationships()
 	{
-		return ['users', 'template', 'tokens'];
+		return ['attribute'];
 	}
 }

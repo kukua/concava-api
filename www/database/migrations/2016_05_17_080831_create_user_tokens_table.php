@@ -10,7 +10,7 @@ class CreateUserTokensTable extends Migration
 		Schema::create('user_tokens', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned();
-			$table->string('token', 32)->index();
+			$table->string('token', 32)->unique();
 			$table->timestamps();
 
 			$table->foreign('user_id')

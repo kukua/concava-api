@@ -10,7 +10,7 @@ class CreateDevicesTable extends Migration
 		Schema::create('devices', function (Blueprint $table) {
 			$table->increments('id');
 			$table->integer('template_id')->unsigned()->nullable();
-			$table->string('udid', 16)->index();
+			$table->string('udid', 16)->unique();
 			$table->string('name');
 			$table->timestamps();
 

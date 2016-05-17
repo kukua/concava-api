@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Model\Database\Device;
 use NilPortugues\Laravel5\JsonApi\Controller\JsonApiController;

@@ -2,19 +2,19 @@
 
 namespace App\Model\Api;
 
-use App\Model\Database\Device;
+use App\Model\Database\User;
 use NilPortugues\Api\Mappings\JsonApiMapping;
 
-class DeviceTransformer implements JsonApiMapping
+class UserTransformer implements JsonApiMapping
 {
 	public function getClass()
 	{
-		return Device::class;
+		return User::class;
 	}
 
 	public function getAlias()
 	{
-		return 'device';
+		return 'user';
 	}
 
 	public function getAliasedProperties()
@@ -35,13 +35,13 @@ class DeviceTransformer implements JsonApiMapping
 	public function getUrls()
 	{
 		return [
-			'self' => ['name' => 'devices.show', 'as_id' => 'id'],
-			'devices' => ['name' => 'devices.index']
+			'self' => ['name' => 'users.show', 'as_id' => 'id'],
+			'users' => ['name' => 'users.index']
 		];
 	}
 
 	public function getRelationships()
 	{
-		return ['users', 'template', 'tokens'];
+		return ['devices', 'templates'];
 	}
 }
