@@ -1,0 +1,19 @@
+laravel:
+    image: geshan/laravel-alpine:php7
+    env_file: .env
+    ports:
+        - "8080:8080"
+    volumes:
+        - ./www:/var/www
+    links:
+        - mariadb
+    restart: always
+mariadb:
+    image: mariadb:10.1
+    env_file: .env
+    environment:
+        # Fix https://goo.gl/fUTycl
+        MYSQL_HOST:
+    ports:
+        - "3306:3306"
+    restart: always
