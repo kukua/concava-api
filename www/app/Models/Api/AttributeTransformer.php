@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Api;
+namespace App\Models\Api;
 
-use App\Model\Database\Attribute;
+use App\Models\Database\Attribute;
 use NilPortugues\Api\Mappings\JsonApiMapping;
 
 class AttributeTransformer implements JsonApiMapping
@@ -42,6 +42,6 @@ class AttributeTransformer implements JsonApiMapping
 
 	public function getRelationships()
 	{
-		return ['template', 'converters', 'calibrators', 'validators'];
+		return [];
 	}
 }

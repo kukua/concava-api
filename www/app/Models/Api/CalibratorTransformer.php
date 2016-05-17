@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Api;
+namespace App\Models\Api;
 
-use App\Model\Database\Calibrator;
+use App\Models\Database\Calibrator;
 use NilPortugues\Api\Mappings\JsonApiMapping;
 
 class CalibratorTransformer implements JsonApiMapping
@@ -42,6 +42,6 @@ class CalibratorTransformer implements JsonApiMapping
 
 	public function getRelationships()
 	{
-		return ['attribute'];
+		return [];
 	}
 }

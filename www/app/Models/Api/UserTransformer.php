@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Api;
+namespace App\Models\Api;
 
-use App\Model\Database\User;
+use App\Models\Database\User;
 use NilPortugues\Api\Mappings\JsonApiMapping;
 
 class UserTransformer implements JsonApiMapping
@@ -42,6 +42,6 @@ class UserTransformer implements JsonApiMapping
 
 	public function getRelationships()
 	{
-		return ['devices', 'templates'];
+		return [];
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Model\Database\Validator;
+use App\Models\Database\Validator;
 use NilPortugues\Laravel5\JsonApi\Controller\JsonApiController;
 
 class ValidatorController extends JsonApiController

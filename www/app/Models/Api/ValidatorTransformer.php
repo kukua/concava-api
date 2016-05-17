@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Api;
+namespace App\Models\Api;
 
-use App\Model\Database\Validator;
+use App\Models\Database\Validator;
 use NilPortugues\Api\Mappings\JsonApiMapping;
 
 class ValidatorTransformer implements JsonApiMapping
@@ -42,6 +42,6 @@ class ValidatorTransformer implements JsonApiMapping
 
 	public function getRelationships()
 	{
-		return ['attribute'];
+		return [];
 	}
 }

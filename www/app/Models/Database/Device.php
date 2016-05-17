@@ -21,6 +21,6 @@ class Device extends Model
 
 	public function template ()
 	{
-		return $this->hasOne(Template::class);
+		return $this->belongsTo(Template::class);
 	}
 }

@@ -11,6 +11,7 @@ class UserTableSeeder extends Seeder
 	{
 		User::truncate();
 		UserToken::truncate();
+		DB::table('user_devices')->truncate();
 
 		$this->create([
 			'name' => 'Chunky Monkey',

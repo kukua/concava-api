@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Model\Database\UserToken;
+use App\Models\Database\UserToken;
 use NilPortugues\Laravel5\JsonApi\Controller\JsonApiController;
 
 class UserTokenController extends JsonApiController

@@ -49,7 +49,8 @@ class RouteServiceProvider extends ServiceProvider
         $router->group([
             'namespace' => $this->namespace,
 			'middleware' => 'api',
-			'prefix' => 'v1'
+			// NOTE(mauvm): Changes route names, but also https://goo.gl/AjMlcv
+			//'prefix' => 'v1'
         ], function ($router) {
             require app_path('Http/Api/routes.php');
         });

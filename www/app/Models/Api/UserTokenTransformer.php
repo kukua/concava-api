@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model\Api;
+namespace App\Models\Api;
 
-use App\Model\Database\UserToken;
+use App\Models\Database\UserToken;
 use NilPortugues\Api\Mappings\JsonApiMapping;
 
 class UserTokenTransformer implements JsonApiMapping
@@ -42,6 +42,6 @@ class UserTokenTransformer implements JsonApiMapping
 
 	public function getRelationships()
 	{
-		return ['user'];
+		return [];
 	}
 }
