@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Database\Device;
-use NilPortugues\Laravel5\JsonApi\Controller\JsonApiController;
+use App\Models\Device;
 
-class DeviceController extends JsonApiController
+class DeviceController extends Controller
 {
-	public function getDataModel ()
-	{
-		return new Device();
-	}
+	protected $class = Device::class;
 }

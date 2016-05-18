@@ -2,13 +2,25 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Database\User;
-use NilPortugues\Laravel5\JsonApi\Controller\JsonApiController;
+use App\Models\User;
+use Auth;
 
-class UserController extends JsonApiController
+class UserController extends Controller
 {
-	public function getDataModel ()
+	protected $class = User::class;
+
+	protected function registerMiddleware ()
 	{
-		return new User();
+		$this->middleware('auth.token', ['except' => 'login']);
+		$this->middleware('auth.basic', ['only' => 'login']);
+	}
+
+	function login ()
+	{
+		$user = Auth::user();
+
+		return response()->json($user->toArray() + [
+			'token' => $user->tokens()->first()->token
+		]);
 	}
 }

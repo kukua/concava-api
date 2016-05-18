@@ -14,7 +14,7 @@ class Calibrator extends Model
 	protected $fillable = ['attribute_id', 'fn', 'order'];
 	public $timestamps = true;
 
-	public function attribute ()
+	function attribute ()
 	{
 		return $this->belongsTo(Attribute::class);
 	}

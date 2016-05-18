@@ -14,22 +14,22 @@ class Attribute extends Model
 	protected $fillable = ['template_id', 'name', 'order'];
 	public $timestamps = true;
 
-	public function template ()
+	function template ()
 	{
 		return $this->belongsTo(Template::class);
 	}
 
-	public function converters ()
+	function converters ()
 	{
 		return $this->hasMany(Converter::class);
 	}
 
-	public function calibrators ()
+	function calibrators ()
 	{
 		return $this->hasMany(Calibrator::class);
 	}
 
-	public function validators ()
+	function validators ()
 	{
 		return $this->hasMany(Validator::class);
 	}

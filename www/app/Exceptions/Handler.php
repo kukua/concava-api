@@ -31,7 +31,7 @@ class Handler extends ExceptionHandler
 	 * @param  \Exception  $e
 	 * @return void
 	 */
-	public function report (Exception $e)
+	function report (Exception $e)
 	{
 		parent::report($e);
 	}
@@ -43,7 +43,7 @@ class Handler extends ExceptionHandler
 	 * @param  \Exception  $e
 	 * @return \Illuminate\Http\Response
 	 */
-	public function render ($request, Exception $e)
+	function render ($request, Exception $e)
 	{
 		$statusCode = 500;
 

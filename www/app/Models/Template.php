@@ -13,17 +13,17 @@ class Template extends Model
 	protected $fillable = ['user_id', 'name'];
 	public $timestamps = true;
 
-	public function user ()
+	function user ()
 	{
 		return $this->belongsTo(User::class);
 	}
 
-	public function devices ()
+	function devices ()
 	{
 		return $this->hasMany(Device::class);
 	}
 
-	public function attributes ()
+	function attributes ()
 	{
 		return $this->hasMany(Attribute::class);
 	}

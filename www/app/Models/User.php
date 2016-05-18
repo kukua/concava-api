@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
 	public static $rules = [
 		'name' => 'required|max:255',
@@ -12,21 +12,40 @@ class User extends Model
 		'password' => 'required|min:8|max:255'
 	];
 	protected $fillable = ['name', 'email', 'password'];
-	protected $hidden = ['password'];
+	protected $hidden = ['password', 'remember_token'];
 	public $timestamps = true;
 
-	public function getDates ()
+	public static function findByToken ($token)
+	{
+		$userToken = UserToken::where('token', $token)->first();
+
+		if ( ! $userToken) return;
+
+		return static::findOrFail($userToken->user_id);
+	}
+
+	function getDates ()
 	{
 		return ['last_login', 'created_at', 'updated_at'];
 	}
 
-	public function devices ()
+	function devices ()
 	{
 		return $this->belongsToMany(Device::class, 'user_devices');
 	}
 
-	public function templates ()
+	function templates ()
 	{
 		return $this->hasMany(Template::class);
+	}
+
+	function tokens ()
+	{
+		return $this->hasMany(UserToken::class);
+	}
+
+	function setPasswordAttribute ($val)
+	{
+		$this->attributes['password'] = bcrypt($val);
 	}
 }

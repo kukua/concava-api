@@ -14,12 +14,12 @@ class Device extends Model
 	protected $fillable = ['template_id', 'udid', 'name'];
 	public $timestamps = true;
 
-	public function users ()
+	function users ()
 	{
 		return $this->belongsToMany(User::class, 'user_devices');
 	}
 
-	public function template ()
+	function template ()
 	{
 		return $this->belongsTo(Template::class);
 	}

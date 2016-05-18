@@ -18,7 +18,7 @@ class UserToken extends Model
 		return bin2hex(openssl_random_pseudo_bytes(16));
 	}
 
-	public function user ()
+	function user ()
 	{
 		return $this->belongsTo(User::class, 'user_devices');
 	}

@@ -22,7 +22,7 @@ class RouteServiceProvider extends ServiceProvider
 	 * @param  \Illuminate\Routing\Router  $router
 	 * @return void
 	 */
-	public function boot (Router $router)
+	function boot (Router $router)
 	{
 		parent::boot($router);
 	}
@@ -33,7 +33,7 @@ class RouteServiceProvider extends ServiceProvider
 	 * @param  \Illuminate\Routing\Router  $router
 	 * @return void
 	 */
-	public function map (Router $router)
+	function map (Router $router)
 	{
 		$this->mapApiRoutes($router);
 	}

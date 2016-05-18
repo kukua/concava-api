@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Database\Attribute;
-use NilPortugues\Laravel5\JsonApi\Controller\JsonApiController;
+use App\Models\Attribute;
 
-class AttributeController extends JsonApiController
+class AttributeController extends Controller
 {
-	public function getDataModel ()
-	{
-		return new Attribute();
-	}
+	protected $class = Attribute::class;
 }
