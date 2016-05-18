@@ -2,11 +2,11 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Models\Database\Template;
-use App\Models\Database\Attribute;
-use App\Models\Database\Converter;
-use App\Models\Database\Calibrator;
-use App\Models\Database\Validator;
+use App\Models\Template;
+use App\Models\Attribute;
+use App\Models\Converter;
+use App\Models\Calibrator;
+use App\Models\Validator;
 
 class TemplateTableSeeder extends Seeder
 {

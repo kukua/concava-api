@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Models\Database\User;
-use App\Models\Database\UserToken;
+use App\Models\User;
+use App\Models\UserToken;
 
 class UserTableSeeder extends Seeder
 {

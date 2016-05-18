@@ -15,7 +15,7 @@ class Kernel extends HttpKernel
 	 * @var array
 	 */
 	protected $middleware = [
-		\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+		//\Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
 	];
 
 	/**
@@ -62,14 +62,10 @@ class Kernel extends HttpKernel
 		}
 		catch (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e)
 		{
-			return response()
-				->setStatusCode(Response::HTTP_NOT_FOUND)
-				->json([
-					'errors' => [
-						'status' => '404 Not Found',
-						'title' => 'Route not found.'
-					]
-				]);
+			return response()->json([
+				'status' => 404,
+				'message' => 'Route not found.'
+			], 404);
 		}
 		catch (Exception $e)
 		{

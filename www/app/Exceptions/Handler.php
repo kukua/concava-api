@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
 		$error = [
 			'status' => $statusCode,
 			'code' => $e->getCode(),
-			'detail' => $e->getMessage()
+			'message' => $e->getMessage()
 		];
 
 		if (\Config::get('app.debug'))
@@ -67,10 +67,6 @@ class Handler extends ExceptionHandler
 			];
 		}
 
-		return response()->json(
-			[ 'errors' => & $error ],
-			$statusCode,
-			[ 'Content-Type' => 'application/vnd.api+json' ]
-		);
+		return response()->json($error, $statusCode);
 	}
 }

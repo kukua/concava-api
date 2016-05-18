@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Models\Database\Device;
-use App\Models\Database\User;
+use App\Models\Device;
+use App\Models\User;
 
 class DeviceTableSeeder extends Seeder
 {
