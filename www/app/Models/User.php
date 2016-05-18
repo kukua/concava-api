@@ -9,13 +9,14 @@ class User extends Authenticatable
 {
 	static $rules = [
 		'name' => 'required|max:255',
-		'email' => 'required|email|unique',
+		'email' => 'required|email',
 		'password' => 'required|min:8|max:255'
 	];
 	protected $fillable = ['name', 'email', 'password'];
 	protected $hidden = ['password', 'remember_token'];
 	public $timestamps = true;
 	public $relationships = ['devices', 'templates', 'tokens'];
+	public $guardCreate = false;
 
 	static function findByToken ($token)
 	{
@@ -53,6 +54,6 @@ class User extends Authenticatable
 
 	function getUserIdsAttribute ()
 	{
-		return [$this->id];
+		return [(int) $this->id];
 	}
 }

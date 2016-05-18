@@ -31,6 +31,6 @@ class Template extends Model
 
 	function getUserIdsAttribute ()
 	{
-		return [$this->user_id];
+		return [(int) $this->user_id];
 	}
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
+use App\Models\UserToken;
 use Auth;
+use Illuminate\Database\Eloquent\Model;
 
 class UserController extends Controller
 {
@@ -16,7 +18,24 @@ class UserController extends Controller
 		$this->middleware('auth.admin', ['except' => ['login', 'store']]);
 	}
 
-	// TODO(mauvm): Add UserToken for newly created User.
+	function store ()
+	{
+		$model = $response = parent::store();
+
+		if ( ! ($model instanceof Model))
+			return $response;
+
+		$token = UserToken::randomToken();
+
+		UserToken::create([
+			'user_id' => $model->id,
+			'token' => $token
+		]);
+
+		$model->token = $token;
+
+		return $model;
+	}
 
 	function login ()
 	{

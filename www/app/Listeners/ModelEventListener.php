@@ -10,15 +10,22 @@ class ModelEventListener
 {
 	function onCreating (Model $model)
 	{
-		if (Auth::user()->is_admin)
+		$user = Auth::user();
+		if ($user && $user->is_admin)
 			return;
+		if ($model->guardCreate === false)
+			return;
+
 		if ( ! in_array(Auth::id(), $model->user_ids, true))
 			throw new HttpException(401, 'Not allowed to create entity.');
 	}
 
 	function onUpdating (Model $model)
 	{
-		if (Auth::user()->is_admin)
+		$user = Auth::user();
+		if ($user && $user->is_admin)
+			return;
+		if ($model->guardUpdate=== false)
 			return;
 
 		$original = $model->findOrFail($model->getOriginal()['id']);
@@ -31,8 +38,12 @@ class ModelEventListener
 
 	function onDeleting (Model $model)
 	{
-		if (Auth::user()->is_admin)
+		$user = Auth::user();
+		if ($user && $user->is_admin)
 			return;
+		if ($model->guardDelete === false)
+			return;
+
 		if ( ! in_array(Auth::id(), $model->user_ids, true))
 			throw new HttpException(401, 'Not allowed to delete entity.');
 	}

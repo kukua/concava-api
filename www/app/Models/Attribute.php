@@ -37,6 +37,6 @@ class Attribute extends Model
 
 	function getUserIdsAttribute ()
 	{
-		return [$this->template->user_id];
+		return [(int) $this->template->user_id];
 	}
 }

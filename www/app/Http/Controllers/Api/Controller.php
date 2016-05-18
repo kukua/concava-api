@@ -76,7 +76,7 @@ class Controller extends \App\Http\Controllers\Controller
 			], 400);
 		}
 
-		$model = (new $this->class);
+		$model = $this->instance();
 		$model->fill($data);
 		$model->save();
 

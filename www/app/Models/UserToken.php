@@ -10,9 +10,10 @@ class UserToken extends Model
 		'user_id' => 'required|integer',
 		'token' => 'required|regex:^[a-z0-9]{32}$'
 	];
-	protected $fillable = ['token'];
+	protected $fillable = ['user_id', 'token'];
 	public $timestamps = true;
 	public $relationships = ['user'];
+	public $guardCreate = false;
 
 	static function randomToken ()
 	{
@@ -26,6 +27,6 @@ class UserToken extends Model
 
 	function getUserIdsAttribute ()
 	{
-		return [$this->user_id];
+		return [(int) $this->user_id];
 	}
 }
