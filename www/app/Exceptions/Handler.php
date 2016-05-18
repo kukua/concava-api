@@ -45,26 +45,15 @@ class Handler extends ExceptionHandler
 	 */
 	public function render ($request, Exception $e)
 	{
-		if ($this->isHttpException($e))
-		{
-			return $this->renderHttpException($e);
-		}
-		else
-		{
-			return parent::render($request, $e);
-		}
-	}
+		$statusCode = 500;
 
-	/**
-	 * Render the given HttpException.
-	 *
-	 * @param  \Symfony\Component\HttpKernel\Exception\HttpException  $e
-	 * @return \Symfony\Component\HttpFoundation\Response
-	 */
-	protected function renderHttpException (HttpException $e)
-	{
+		if ($e instanceof HttpException)
+		{
+			$statusCode = $e->getStatusCode();
+		}
+
 		$error = [
-			'status' => $e->getStatusCode(),
+			'status' => $statusCode,
 			'code' => $e->getCode(),
 			'detail' => $e->getMessage()
 		];
@@ -78,6 +67,10 @@ class Handler extends ExceptionHandler
 			];
 		}
 
-		return response()->json([ 'errors' => $error ], $e->getStatusCode());
+		return response()->json(
+			[ 'errors' => & $error ],
+			$statusCode,
+			[ 'Content-Type' => 'application/vnd.api+json' ]
+		);
 	}
 }
