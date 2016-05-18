@@ -7,7 +7,7 @@ use NilPortugues\Laravel5\JsonApi\Controller\JsonApiController;
 
 class CalibratorController extends JsonApiController
 {
-	public function getDataModel()
+	public function getDataModel ()
 	{
 		return new Calibrator();
 	}

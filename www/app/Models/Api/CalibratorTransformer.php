@@ -7,32 +7,32 @@ use NilPortugues\Api\Mappings\JsonApiMapping;
 
 class CalibratorTransformer implements JsonApiMapping
 {
-	public function getClass()
+	public function getClass ()
 	{
 		return Calibrator::class;
 	}
 
-	public function getAlias()
+	public function getAlias ()
 	{
 		return 'calibrator';
 	}
 
-	public function getAliasedProperties()
+	public function getAliasedProperties ()
 	{
 		return [];
 	}
 
-	public function getHideProperties()
+	public function getHideProperties ()
 	{
 		return [];
 	}
 
-	public function getIdProperties()
+	public function getIdProperties ()
 	{
 		return ['id'];
 	}
 
-	public function getUrls()
+	public function getUrls ()
 	{
 		return [
 			'self' => ['name' => 'calibrators.show', 'as_id' => 'id'],
@@ -40,7 +40,7 @@ class CalibratorTransformer implements JsonApiMapping
 		];
 	}
 
-	public function getRelationships()
+	public function getRelationships ()
 	{
 		return [];
 	}

@@ -68,6 +68,7 @@ class Handler extends ExceptionHandler
 			'code' => $e->getCode(),
 			'detail' => $e->getMessage()
 		];
+
 		if (\Config::get('app.debug'))
 		{
 			$error['meta'] = [
@@ -76,6 +77,7 @@ class Handler extends ExceptionHandler
 				'trace' => $e->getTraceAsString()
 			];
 		}
+
 		return response()->json([ 'errors' => $error ], $e->getStatusCode());
 	}
 }
