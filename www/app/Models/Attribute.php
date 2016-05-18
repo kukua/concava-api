@@ -33,4 +33,9 @@ class Attribute extends Model
 	{
 		return $this->hasMany(Validator::class);
 	}
+
+	function getUserIdsAttribute ()
+	{
+		return [$this->template->user_id];
+	}
 }

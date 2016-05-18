@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use Auth;
 use Request;
 use Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -85,7 +86,13 @@ class Controller extends \App\Http\Controllers\Controller
 			}
 		}
 
-		return $query->get(['*']);
+		// Filter for user
+		$models = $query->get(['*']);
+		$userId = Auth::id();
+
+		return $models->filter(function ($model) use ($userId) {
+			return in_array($userId, $model->user_ids, true);
+		});
 	}
 
 	function store ()
@@ -94,19 +101,26 @@ class Controller extends \App\Http\Controllers\Controller
 
 		if ($validator->fails())
 		{
-			return Response::json($validator->messages(), 500);
+			return response()->json([
+				"messages" => $validator->messages()
+			], 400);
 		}
 
-		$entity = (new $this->class);
-		$entity->fill($data);
-		$entity->save();
+		$model = (new $this->class);
+		$model->fill($data);
+		$model->save();
 
-		return $entity;
+		return $model;
 	}
 
 	function show ($id)
 	{
-		return $this->findOrFail($id);
+		$model = $this->findOrFail($id);
+
+		if ( ! in_array(Auth::id(), $model->user_ids, true))
+			throw new HttpException(401, 'Not allowed to read entity.');
+
+		return $model;
 	}
 
 	function update ($id)
@@ -115,20 +129,22 @@ class Controller extends \App\Http\Controllers\Controller
 
 		if ($validator->fails())
 		{
-			return Response::json($validator->messages(), 500);
+			return response()->json([
+				"messages" => $validator->messages()
+			], 400);
 		}
 
-		$entity = $this->findOrFail($id);
-		$entity->update($data);
+		$model = $this->findOrFail($id);
+		$model->update($data);
 
-		return $entity;
+		return $model;
 	}
 
 	function destroy ($id)
 	{
-		$entity = $this->findOrFail($id);
-		$entity->delete();
+		$model = $this->findOrFail($id);
+		$model->delete();
 
-		return $entity;
+		return $model;
 	}
 }

@@ -23,4 +23,9 @@ class Device extends Model
 	{
 		return $this->belongsTo(Template::class);
 	}
+
+	function getUserIdsAttribute ()
+	{
+		return $this->users->pluck('id')->toArray();
+	}
 }

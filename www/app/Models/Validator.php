@@ -19,4 +19,9 @@ class Validator extends Model
 	{
 		return $this->belongsTo(Attribute::class);
 	}
+
+	function getUserIdsAttribute ()
+	{
+		return $this->attribute->user_ids;
+	}
 }

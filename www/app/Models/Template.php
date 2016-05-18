@@ -27,4 +27,9 @@ class Template extends Model
 	{
 		return $this->hasMany(Attribute::class);
 	}
+
+	function getUserIdsAttribute ()
+	{
+		return [$this->user_id];
+	}
 }
