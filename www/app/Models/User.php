@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Hash;
 
 class User extends Authenticatable
 {
@@ -47,7 +48,7 @@ class User extends Authenticatable
 
 	function setPasswordAttribute ($val)
 	{
-		$this->attributes['password'] = bcrypt($val);
+		$this->attributes['password'] = Hash::make($val);
 	}
 
 	function getUserIdsAttribute ()
