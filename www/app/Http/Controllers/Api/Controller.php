@@ -23,6 +23,103 @@ class Controller extends \App\Http\Controllers\Controller
 		$this->middleware('auth.token');
 	}
 
+	function index ()
+	{
+		$query = $this->query();
+
+		// Filtering
+		if ($filters = Request::input('filter'))
+		{
+			foreach (explode(',', $filters) as $filter)
+			{
+				list($column, $value) = explode(':', $filter);
+				$query->where($column, '=', $value);
+			}
+		}
+
+		// Sorting
+		if ($sort = Request::input('sort'))
+		{
+			foreach (explode(',', $sort) as $column)
+			{
+				$order = 'asc';
+				if (starts_with($column, '-'))
+				{
+					$order = 'desc';
+					$column = substr($column, 1);
+				}
+
+				$query->orderBy($column, $order);
+			}
+		}
+
+		// Filter for user
+		$models = $query->get(['*']);
+		$userId = Auth::id();
+		$self = $this;
+
+		return $models->filter(function ($model) use ($userId) {
+			return in_array($userId, $model->user_ids, true);
+		})->each(function ($model) use ($self) {
+			$self->addIncludes($model);
+		});
+	}
+
+	function store ()
+	{
+		$validator = Validator::make($data = Request::input(), $this->getRules());
+
+		if ($validator->fails())
+		{
+			return response()->json([
+				'messages' => $validator->messages()
+			], 400);
+		}
+
+		$model = (new $this->class);
+		$model->fill($data);
+		$model->save();
+
+		return $model;
+	}
+
+	function show ($id)
+	{
+		$model = $this->findOrFail($id);
+
+		if ( ! in_array(Auth::id(), $model->user_ids, true))
+			throw new HttpException(401, 'Not allowed to read entity.');
+
+		$this->addIncludes($model);
+
+		return $model;
+	}
+
+	function update ($id)
+	{
+		$validator = Validator::make($data = Request::input(), $this->getRules(true));
+
+		if ($validator->fails())
+		{
+			return response()->json([
+				'messages' => $validator->messages()
+			], 400);
+		}
+
+		$model = $this->findOrFail($id);
+		$model->update($data);
+
+		return $model;
+	}
+
+	function destroy ($id)
+	{
+		$model = $this->findOrFail($id);
+		$model->delete();
+
+		return $model;
+	}
+
 	protected function instance ()
 	{
 		return (new $this->class);
@@ -91,102 +188,5 @@ class Controller extends \App\Http\Controllers\Controller
 		}
 
 		$this->loadIncludes($model, $includes);
-	}
-
-	function index ()
-	{
-		$query = $this->query();
-
-		// Filtering
-		if ($filters = Request::input('filter'))
-		{
-			foreach (explode(',', $filters) as $filter)
-			{
-				list($column, $value) = explode(':', $filter);
-				$query->where($column, '=', $value);
-			}
-		}
-
-		// Sorting
-		if ($sort = Request::input('sort'))
-		{
-			foreach (explode(',', $sort) as $column)
-			{
-				$order = 'asc';
-				if (starts_with($column, '-'))
-				{
-					$order = 'desc';
-					$column = substr($column, 1);
-				}
-
-				$query->orderBy($column, $order);
-			}
-		}
-
-		// Filter for user
-		$models = $query->get(['*']);
-		$userId = Auth::id();
-		$self = $this;
-
-		return $models->filter(function ($model) use ($userId) {
-			return in_array($userId, $model->user_ids, true);
-		})->each(function ($model) use ($self) {
-			$self->addIncludes($model);
-		});
-	}
-
-	function store ()
-	{
-		$validator = Validator::make($data = Request::input(), $this->getRules());
-
-		if ($validator->fails())
-		{
-			return response()->json([
-				"messages" => $validator->messages()
-			], 400);
-		}
-
-		$model = (new $this->class);
-		$model->fill($data);
-		$model->save();
-
-		return $model;
-	}
-
-	function show ($id)
-	{
-		$model = $this->findOrFail($id);
-
-		if ( ! in_array(Auth::id(), $model->user_ids, true))
-			throw new HttpException(401, 'Not allowed to read entity.');
-
-		$this->addIncludes($model);
-
-		return $model;
-	}
-
-	function update ($id)
-	{
-		$validator = Validator::make($data = Request::input(), $this->getRules(true));
-
-		if ($validator->fails())
-		{
-			return response()->json([
-				"messages" => $validator->messages()
-			], 400);
-		}
-
-		$model = $this->findOrFail($id);
-		$model->update($data);
-
-		return $model;
-	}
-
-	function destroy ($id)
-	{
-		$model = $this->findOrFail($id);
-		$model->delete();
-
-		return $model;
 	}
 }

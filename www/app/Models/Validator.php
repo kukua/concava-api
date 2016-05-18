@@ -9,7 +9,7 @@ class Validator extends Model
 	static $rules = [
 		'attribute_id' => 'required|integer',
 		'type' => 'required|max:32',
-		'value' => 'required|max:255',
+		'value' => 'max:255',
 		'order' => 'required|integer|min:0'
 	];
 	protected $fillable = ['attribute_id', 'type', 'value', 'order'];
