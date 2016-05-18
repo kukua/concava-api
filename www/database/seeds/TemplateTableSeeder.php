@@ -10,8 +10,8 @@ use App\Models\Database\Validator;
 
 class TemplateTableSeeder extends Seeder
 {
-    public function run ()
-    {
+	public function run ()
+	{
 		Template::truncate();
 		Attribute::truncate();
 		Converter::truncate();
@@ -47,7 +47,7 @@ class TemplateTableSeeder extends Seeder
 				]
 			]
 		]);
-    }
+	}
 
 	private function create (array $data)
 	{
