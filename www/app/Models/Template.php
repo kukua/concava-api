@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Template extends Model
 {
-	public static $rules = [
+	static $rules = [
 		'user_id' => 'required|integer',
 		'name' => 'required|max:255'
 	];
 	protected $fillable = ['user_id', 'name'];
 	public $timestamps = true;
+	public $relationships = ['user', 'devices', 'attributes'];
 
 	function user ()
 	{

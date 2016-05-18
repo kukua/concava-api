@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-	public static $rules = [
+	static $rules = [
 		'name' => 'required|max:255',
 		'email' => 'required|email|unique',
 		'password' => 'required|min:8|max:255'
@@ -14,8 +14,9 @@ class User extends Authenticatable
 	protected $fillable = ['name', 'email', 'password'];
 	protected $hidden = ['password', 'remember_token'];
 	public $timestamps = true;
+	public $relationships = ['devices', 'templates', 'tokens'];
 
-	public static function findByToken ($token)
+	static function findByToken ($token)
 	{
 		$userToken = UserToken::where('token', $token)->first();
 

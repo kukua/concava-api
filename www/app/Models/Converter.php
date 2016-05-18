@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Converter extends Model
 {
-	public static $rules = [
+	static $rules = [
 		'attribute_id' => 'required|integer',
 		'type' => 'required|max:32',
 		'value' => 'required|max:255',
@@ -14,6 +14,7 @@ class Converter extends Model
 	];
 	protected $fillable = ['attribute_id', 'type', 'value', 'order'];
 	public $timestamps = true;
+	public $relationships = ['attribute'];
 
 	function attribute ()
 	{

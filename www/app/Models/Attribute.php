@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attribute extends Model
 {
-	public static $rules = [
+	static $rules = [
 		'template_id' => 'required|integer',
 		'name' => 'required|max:255',
 		'order' => 'required|integer|min:0'
 	];
 	protected $fillable = ['template_id', 'name', 'order'];
 	public $timestamps = true;
+	public $relationships = ['template', 'converters', 'calibrators', 'validators'];
 
 	function template ()
 	{

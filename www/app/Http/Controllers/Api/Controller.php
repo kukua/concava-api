@@ -7,6 +7,7 @@ use Request;
 use Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Database\Eloquent\Model;
 
 class Controller extends \App\Http\Controllers\Controller
 {
@@ -56,6 +57,42 @@ class Controller extends \App\Http\Controllers\Controller
 		}
 	}
 
+	// Recursively eager load includes
+	protected function loadIncludes (Model $model, array & $includes)
+	{
+		foreach ($model->relationships as $relation)
+		{
+			$include = array_get($includes, $relation);
+
+			if ( ! $include)
+			{
+				unset($model->$relation); // Unload
+				continue;
+			}
+
+			$model->load($relation);
+
+			if (is_array($include))
+				$this->loadIncludes($model->$relation, $include);
+		}
+	}
+
+	protected function addIncludes (Model $model)
+	{
+		$keys = explode(',', (string) Request::input('include'));
+		$includes = [];
+
+		foreach ($keys as & $key)
+		{
+			if (array_get($includes, $key))
+				continue;
+
+			array_set($includes, $key, true);
+		}
+
+		$this->loadIncludes($model, $includes);
+	}
+
 	function index ()
 	{
 		$query = $this->query();
@@ -89,9 +126,12 @@ class Controller extends \App\Http\Controllers\Controller
 		// Filter for user
 		$models = $query->get(['*']);
 		$userId = Auth::id();
+		$self = $this;
 
 		return $models->filter(function ($model) use ($userId) {
 			return in_array($userId, $model->user_ids, true);
+		})->each(function ($model) use ($self) {
+			$self->addIncludes($model);
 		});
 	}
 
@@ -119,6 +159,8 @@ class Controller extends \App\Http\Controllers\Controller
 
 		if ( ! in_array(Auth::id(), $model->user_ids, true))
 			throw new HttpException(401, 'Not allowed to read entity.');
+
+		$this->addIncludes($model);
 
 		return $model;
 	}
