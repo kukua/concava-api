@@ -17,7 +17,7 @@ class Device extends Model
 
 	function users ()
 	{
-		return $this->belongsToMany(User::class, 'user_devices');
+		return $this->belongsToMany(User::class, 'user_devices')->withTimestamps();
 	}
 
 	function template ()

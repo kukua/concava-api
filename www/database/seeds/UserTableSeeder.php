@@ -16,7 +16,8 @@ class UserTableSeeder extends Seeder
 		$this->create([
 			'name' => 'Chunky Monkey',
 			'email' => 'chunky@monkey.com',
-			'password' => 'banana'
+			'password' => 'banana',
+			'is_admin' => true
 		]);
 		$this->create([
 			'name' => 'Han Solo',
@@ -36,5 +37,11 @@ class UserTableSeeder extends Seeder
 			'user_id' => $user->id,
 			'token' => UserToken::randomToken()
 		]);
+
+		if ( ! empty($data['is_admin']))
+		{
+			$user->is_admin = true;
+			$user->save();
+		}
 	}
 }
