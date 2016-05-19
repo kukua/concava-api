@@ -15,6 +15,16 @@ class Attribute extends Model
 	public $timestamps = true;
 	public $relationships = ['template', 'converters', 'calibrators', 'validators'];
 
+	static function scopeByTemplate ($query, $template)
+	{
+		if ($template instanceof Model)
+			$id = $template->id;
+		else
+			$id = (int) $template;
+
+		return $query->where('template_id', $id);
+	}
+
 	function template ()
 	{
 		return $this->belongsTo(Template::class);

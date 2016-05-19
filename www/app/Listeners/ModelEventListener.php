@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Auth;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-// NOTE(mauvm): Auth::id() must not return zero! This breaks authorization.
+// Auth::id() must not return zero! This breaks authorization.
 
 class ModelEventListener
 {

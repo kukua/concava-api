@@ -25,6 +25,31 @@ class AttributeController extends Controller
 		return $this->handleConCaVa(parent::update($id));
 	}
 
+	function reorder ()
+	{
+		$templateId = (int) Request::input('template_id');
+		$order = (array) Request::input('order');
+
+		if ( ! $templateId)
+			throw new HttpException(400, 'Missing template_id.');
+		if ( ! $order)
+			throw new HttpException(400, 'Missing order array.');
+
+		$attributes = Attribute::byTemplate($templateId)
+			->orderBy('order')
+			->get();
+		$j = count($order);
+
+		foreach ($attributes as $attribute)
+		{
+			$i = array_search($attribute->id, $order);
+			$attribute->order = ($i !== false ? $i : $j++);
+			$attribute->save();
+		}
+
+		return response()->json(null);
+	}
+
 	protected function handleConCaVa ($response)
 	{
 		$model = $response;
