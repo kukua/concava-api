@@ -17,7 +17,7 @@ class Device extends Model
 
 	public $setCurrentUserIdOnCreate = true;
 	// Used by App\Http\Controllers\Api\DeviceController
-	protected $userId = 0;
+	public $user_id = 0;
 
 	function users ()
 	{
@@ -31,11 +31,11 @@ class Device extends Model
 
 	function setUserIdAttribute ($val)
 	{
-		$this->userId = $val;
+		$this->user_id = $val;
 	}
 
 	function getUserIdsAttribute ()
 	{
-		return $this->users->pluck('id')->toArray() + [(int) $this->userId];
+		return $this->users->pluck('id')->toArray() + [(int) $this->user_id];
 	}
 }
