@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthenticateBasic
 {
@@ -16,6 +17,11 @@ class AuthenticateBasic
 	 */
 	function handle ($request, Closure $next)
 	{
-		return Auth::onceBasic() ?: $next($request);
+		if (Auth::onceBasic())
+		{
+			throw new HttpException(401, 'Invalid credentials.');
+		}
+
+		return $next($request);
 	}
 }
