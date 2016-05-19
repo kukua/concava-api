@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthenticateToken
 {
@@ -17,11 +18,16 @@ class AuthenticateToken
 	 */
 	function handle ($request, Closure $next)
 	{
+		if (empty($_SERVER['HTTP_AUTHORIZATION']))
+		{
+			throw new HttpException(401, 'Authorization header required.');
+		}
+
 		$auth = (string) $_SERVER['HTTP_AUTHORIZATION'];
 
 		if ( ! starts_with($auth, 'Token '))
 		{
-			return response('Authorization Token required.', 401);
+			throw new HttpException(401, 'Authorization token required.');
 		}
 
 		$token = substr($auth, 6);
@@ -29,7 +35,7 @@ class AuthenticateToken
 
 		if ( ! $user)
 		{
-			return response('Unauthorized.', 401);
+			throw new HttpException(401, 'Unauthorized.');
 		}
 
 		Auth::login($user);

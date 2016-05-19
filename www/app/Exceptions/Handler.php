@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Zend\Diactoros\Response as ZendResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -46,16 +47,24 @@ class Handler extends ExceptionHandler
 	function render ($request, Exception $e)
 	{
 		$statusCode = 500;
+		$code = (int) $e->getCode();
+		$message = (string) $e->getMessage();
 
 		if ($e instanceof HttpException)
 		{
 			$statusCode = $e->getStatusCode();
 		}
 
+		if (empty($message))
+		{
+			$res = new ZendResponse('php://memory', $statusCode);
+			$message = $res->getReasonPhrase() . '.';
+		}
+
 		$error = [
-			'status' => $statusCode,
-			'code' => $e->getCode(),
-			'message' => $e->getMessage()
+			'status'  => & $statusCode,
+			'code'    => & $code,
+			'message' => & $message
 		];
 
 		if (\Config::get('app.debug'))

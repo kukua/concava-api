@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Auth;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthenticateAdmin
 {
@@ -18,7 +19,7 @@ class AuthenticateAdmin
 	{
 		if ( ! Auth::user()->is_admin)
 		{
-			return response('Unauthorized.', 401);
+			throw new HttpException(401, 'Unauthorized.');
 		}
 
 		return $next($request);

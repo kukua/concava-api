@@ -64,7 +64,7 @@ class Kernel extends HttpKernel
 		{
 			return response()->json([
 				'status' => 404,
-				'message' => 'Route not found.'
+				'message' => 'Not found.'
 			], 404);
 		}
 		catch (Exception $e)
