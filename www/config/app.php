@@ -156,9 +156,6 @@ return [
 		App\Providers\EventServiceProvider::class,
 		App\Providers\RouteServiceProvider::class,
 
-
-		NilPortugues\Laravel5\JsonApi\Laravel5JsonApiServiceProvider::class,
-
 	],
 
 	/*

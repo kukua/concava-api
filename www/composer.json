@@ -32,9 +32,6 @@
         ]
     },
     "scripts": {
-        "post-root-package-install": [
-            "php -r \"copy('.env.sample', '.env');\""
-        ],
         "post-create-project-cmd": [
             "php artisan key:generate"
         ],

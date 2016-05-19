@@ -6,10 +6,11 @@
 
 ```bash
 git clone https://github.com/kukua/concava-api.git
-cd concava-api
+cd concava-api/www
 cp .env.sample .env
 chmod 600 .env
 # > Edit .env
+cd ../
 docker-compose up -d
 docker-compose run --rm --entrypoint=composer laravel install
 docker-compose run --rm --entrypoint=php laravel artisan migrate
