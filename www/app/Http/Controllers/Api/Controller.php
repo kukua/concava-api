@@ -8,6 +8,7 @@ use Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 
 class Controller extends \App\Http\Controllers\Controller
 {
@@ -177,7 +178,19 @@ class Controller extends \App\Http\Controllers\Controller
 			$model->load($relation);
 
 			if (is_array($include))
-				$this->loadIncludes($model->$relation, $include);
+			{
+				$models = $model->$relation;
+
+				if ($models instanceof Collection)
+					$models = $models->all();
+				else
+					$models = [$models];
+
+				foreach ($models as $otherModel)
+				{
+					$this->loadIncludes($otherModel, $include);
+				}
+			}
 		}
 	}
 
