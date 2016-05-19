@@ -8,7 +8,7 @@ class UserToken extends Model
 {
 	static $rules = [
 		'user_id' => 'required|integer',
-		'token' => 'required|regex:^[a-z0-9]{32}$'
+		'token' => 'required|regex:/^[a-z0-9]{32}$/'
 	];
 	protected $fillable = ['user_id', 'token'];
 	public $timestamps = true;

@@ -13,6 +13,7 @@ class Template extends Model
 	protected $fillable = ['user_id', 'name'];
 	public $timestamps = true;
 	public $relationships = ['user', 'devices', 'attributes'];
+	public $setCurrentUserIdOnCreate = true;
 
 	function user ()
 	{

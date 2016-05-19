@@ -67,7 +67,15 @@ class Controller extends \App\Http\Controllers\Controller
 
 	function store ()
 	{
-		$validator = Validator::make($data = Request::input(), $this->getRules());
+		$data = Request::input();
+		$model = $this->instance();
+
+		if (empty($data['user_id']) && $model->setCurrentUserIdOnCreate === true)
+		{
+			$data['user_id'] = Auth::id();
+		}
+
+		$validator = Validator::make($data, $this->getRules());
 
 		if ($validator->fails())
 		{
@@ -76,7 +84,6 @@ class Controller extends \App\Http\Controllers\Controller
 			], 400);
 		}
 
-		$model = $this->instance();
 		$model->fill($data);
 		$model->save();
 

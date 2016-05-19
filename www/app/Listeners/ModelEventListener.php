@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Auth;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+// NOTE(mauvm): Auth::id() must not return zero! This breaks authorization.
+
 class ModelEventListener
 {
 	function onCreating (Model $model)
@@ -25,7 +27,7 @@ class ModelEventListener
 		$user = Auth::user();
 		if ($user && $user->is_admin)
 			return;
-		if ($model->guardUpdate=== false)
+		if ($model->guardUpdate === false)
 			return;
 
 		$original = $model->findOrFail($model->getOriginal()['id']);
