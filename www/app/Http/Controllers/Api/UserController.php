@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\UserToken;
 use Auth;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\QueryException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class UserController extends Controller
 {
@@ -20,7 +22,15 @@ class UserController extends Controller
 
 	function store ()
 	{
-		$model = $response = parent::store();
+		try
+		{
+			$model = $response = parent::store();
+		}
+		catch (QueryException $e)
+		{
+			throw new HttpException(400, $e->getPrevious()->getMessage(),
+				$e, $headers = [], $e->getCode());
+		}
 
 		if ( ! ($model instanceof Model))
 			return $response;
