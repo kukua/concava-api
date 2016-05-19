@@ -26,3 +26,9 @@ docker-compose run --rm --entrypoint=composer laravel dumpautoload
 # Test
 docker-compose run --rm --entrypoint=php laravel ./vendor/bin/phpunit
 ```
+
+## License
+
+This software is licensed under the [MIT license](https://github.com/kukua/concava/blob/master/LICENSE).
+
+© 2016 Kukua BV
