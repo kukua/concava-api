@@ -1,6 +1,10 @@
 # ConCaVa API
 
-> API for modifying ConCaVa metadata.
+> API for modifying [ConCaVa](https://github.com/kukua/concava) metadata.
+
+## Documentation
+
+The project documentation is hosted on [http://kukua.github.io/concava-api/](http://kukua.github.io/concava-api/).
 
 ## Usage
 
