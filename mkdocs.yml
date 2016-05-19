@@ -4,3 +4,4 @@ site_name: ConCaVa API
 theme: readthedocs
 pages:
     - Home: index.md
+    - Getting started: getting-started.md

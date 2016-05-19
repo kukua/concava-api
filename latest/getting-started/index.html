@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting started - ConCaVa API</title>
+  
+
+  <link rel="shortcut icon" href="../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Getting started";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script>
+  <script src="../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> ConCaVa API</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="..">Home</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Getting started</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#getting-started">Getting started</a></li>
+                
+                    <li><a class="toctree-l4" href="#step-1-determine-data-format">Step 1: Determine data format</a></li>
+                
+                    <li><a class="toctree-l4" href="#step-2-register-user">Step 2: Register user</a></li>
+                
+                    <li><a class="toctree-l4" href="#step-3-create-template">Step 3: Create template</a></li>
+                
+                    <li><a class="toctree-l4" href="#step-4-add-attributes-to-template">Step 4: Add attributes to template</a></li>
+                
+                    <li><a class="toctree-l4" href="#step-5-create-device">Step 5: Create device</a></li>
+                
+                    <li><a class="toctree-l4" href="#step-6-test-posting-data-to-concava">Step 6: Test posting data to ConCaVa</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">ConCaVa API</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Getting started</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="getting-started">Getting started</h1>
+<p>This chapter helps you to get started with the ConCaVa API.</p>
+<h2 id="step-1-determine-data-format">Step 1: Determine data format</h2>
+<p>Say you have a device with two sensors:</p>
+<ul>
+<li>Temperature: in degrees Celcius, with one decimal point and between -100.0 and 100.0. E.g. <code>234</code>, which will later be divided by 10 to add the decimal point.</li>
+<li>Distance: in centimeters, between 0 and 80. E.g. <code>15</code>.</li>
+</ul>
+<p>Since some devices do not always have an internet connection, we also add the UNIX timestamp of the moment the measurement occured.</p>
+<p>This can be translated into the following format:</p>
+<ul>
+<li><code>timestamp =&gt; uint32le</code></li>
+<li><code>temp =&gt; int16le</code></li>
+<li><code>distance =&gt; uint8</code> (no endianess for a single byte)</li>
+</ul>
+<p>For example: <code>20e03e57 ea00 0f</code> (1463738400, 234, 15)</p>
+<h2 id="step-2-register-user">Step 2: Register user</h2>
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/users -H 'Content-Type: application/json' \
+    -d '{&quot;name&quot;: &quot;John Doe&quot;, &quot;email&quot;: &quot;john@example.com&quot;, &quot;password&quot;: &quot;securepassword&quot;, &quot;password_confirmation&quot;: &quot;securepassword&quot;}'
+# {&quot;id&quot;: 123, ..., &quot;token&quot;: &quot;&lt;auth token&gt;&quot;}
+</code></pre>
+
+<p>Later on, you can again retrieve the token with:</p>
+<pre><code class="bash">curl -v http://&lt;host&gt;/users/login -H 'Authorization: Basic &lt;base64 encoded &lt;email&gt;:&lt;password&gt;&gt;'
+# {&quot;id&quot;: 110, ..., &quot;token&quot;: &quot;&lt;auth token&gt;&quot;}
+</code></pre>
+
+<h2 id="step-3-create-template">Step 3: Create template</h2>
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/templates -H 'Content-Type: application/json' \
+    -d '{&quot;name&quot;: &quot;My template&quot;}'
+# {&quot;id&quot;: 120, ...}
+</code></pre>
+
+<h2 id="step-4-add-attributes-to-template">Step 4: Add attributes to template</h2>
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+    -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;timestamp&quot;, &quot;order&quot;: 0, &quot;converter&quot;:&quot;uint32le&quot;}'
+# {&quot;id&quot;: 130, ...}
+curl -v -XPOST http://&lt;host&gt;/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+    -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;temp&quot;, &quot;order&quot;: 1, &quot;converter&quot;:&quot;int16le&quot;, &quot;calibrator&quot;: &quot;return value / 10&quot;, &quot;validators&quot;: &quot;min=-100 max=100&quot;}'
+# {&quot;id&quot;: 131, ...}
+curl -v -XPOST http://&lt;host&gt;/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+    -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;distance&quot;, &quot;order&quot;: 2, &quot;converter&quot;:&quot;uint8&quot;, &quot;validators&quot;: &quot;min=0 max=80&quot;}'
+# {&quot;id&quot;: 132, ...}
+</code></pre>
+
+<h2 id="step-5-create-device">Step 5: Create device</h2>
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/devices -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+    -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;My device&quot;, &quot;udid&quot;: &quot;&lt;device id&gt;&quot;}'
+# {&quot;id&quot;: 140, ...}
+</code></pre>
+
+<h2 id="step-6-test-posting-data-to-concava">Step 6: Test posting data to ConCaVa</h2>
+<pre><code class="bash">echo '20e03e57ea000f' | xxd -r -p | \
+    curl -i -XPUT 'http://&lt;host&gt;:3000/v1/sensorData/&lt;device id&gt;' \
+    -H 'Authorization: Token &lt;auth token&gt;' \
+    -H 'Content-Type: application/octet-stream' --data-binary @-
+# Response: 200 OK
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href=".." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+
+</body>
+</html>
