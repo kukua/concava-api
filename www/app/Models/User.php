@@ -34,7 +34,7 @@ class User extends Authenticatable
 
 	function devices ()
 	{
-		return $this->belongsToMany(Device::class, 'user_devices');
+		return $this->belongsToMany(Device::class, 'user_devices')->withTimestamps();
 	}
 
 	function templates ()
