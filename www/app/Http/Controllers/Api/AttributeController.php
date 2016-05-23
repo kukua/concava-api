@@ -60,6 +60,8 @@ class AttributeController extends Controller
 		$this->setConverter($model, Request::input('converter'));
 		$this->setCalibrator($model, Request::input('calibrator'));
 		$this->setValidators($model, Request::input('validators'));
+
+		return $model;
 	}
 
 	protected function setConverter (Model $model, $type)
