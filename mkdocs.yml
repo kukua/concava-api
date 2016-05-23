@@ -1,7 +1,7 @@
 docs_dir: doc
 site_dir: latest
 site_name: ConCaVa API
-theme: readthedocs
+theme_dir: theme
 dev_addr: 0.0.0.0:8000
 pages:
     - Home: index.md
