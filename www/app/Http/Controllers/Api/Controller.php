@@ -57,13 +57,21 @@ class Controller extends \App\Http\Controllers\Controller
 		// Filter for user
 		$models = $query->get(['*']);
 		$userId = Auth::id();
-		$self = $this;
 
-		return $models->filter(function ($model) use ($userId) {
+		$models = $models->filter(function ($model) use ($userId) {
 			return in_array($userId, $model->user_ids, true);
-		})->each(function ($model) use ($self) {
+		});
+
+		// Add includes
+		$self = $this;
+		$models->each(function ($model) use ($self) {
 			$self->addIncludes($model);
 		});
+
+		// Return models
+		// NOTE(mauvm): Use array_values to reset array indices, or else
+		// json_encode could create an object instead of an array.
+		return array_values($models->all());
 	}
 
 	function store ()
