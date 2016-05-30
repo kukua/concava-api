@@ -124,6 +124,7 @@ return [
 
 		Arubacao\BasicAuth\BasicGuardServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
+		GrahamCampbell\Throttle\ThrottleServiceProvider::class,
 
 	],
 
@@ -146,6 +147,7 @@ return [
 		'QueryException' => Illuminate\Database\QueryException::class,
 		'Request' => Illuminate\Support\Facades\Request::class,
 		'InputValidator' => Illuminate\Support\Facades\Validator::class,
+		'Throttle' => GrahamCampbell\Throttle\Facades\Throttle::class,
 
 	],
 

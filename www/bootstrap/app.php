@@ -66,7 +66,7 @@ $app->singleton(
 */
 
 $app->routeMiddleware([
-	//'throttle' => Illuminate\Routing\Middleware\ThrottleRequests::class,
+	'throttle' => GrahamCampbell\Throttle\Http\Middleware\ThrottleMiddleware::class,
 	'cross-origin' => App\Http\Middleware\CrossOriginHeaders::class,
 	'auth.admin' => App\Http\Middleware\AuthenticateAdmin::class,
 	'auth.token' => App\Http\Middleware\AuthenticateToken::class,
@@ -101,7 +101,7 @@ foreach ((array) config('app.providers') as $class) {
 
 $app->group([
 	'namespace' => 'App\Http\Controllers',
-	'middleware' => [/*'throttle:60,1',*/ 'cross-origin'],
+	'middleware' => ['throttle:60,1', 'cross-origin'],
 ], function ($app) {
 	require __DIR__.'/../app/Http/routes.php';
 });
