@@ -5,6 +5,8 @@ namespace App\Models;
 // Copied and modified from Laravel 5.2 Illuminate\Foundation\Auth\User
 
 use Model;
+use Hash;
+use DateTime;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -20,6 +22,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	];
 	protected $fillable = ['name', 'email', 'password'];
 	protected $hidden = ['password', 'remember_token'];
+	protected $appends = ['token'];
 	public $timestamps = true;
 	public $relationships = ['devices', 'templates', 'tokens'];
 	public $guardCreate = false;
@@ -48,12 +51,21 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->hasMany(UserToken::class);
 	}
 
+	function touchLastLogin ($save = true) {
+		$this->last_login = new DateTime;
+		if ($save) $this->save();
+	}
+
 	function setPasswordAttribute ($val) {
 		$this->attributes['password'] = Hash::make($val);
 	}
 
 	function getUserIdsAttribute () {
 		return [(int) $this->id];
+	}
+
+	function getTokenAttribute () {
+		return $this->tokens()->first()->token;
 	}
 
 	// Cast attributes to correct types

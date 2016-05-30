@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use QueryException;
 use Model;
 use Auth;
+use QueryException;
+use HttpException;
 use App\Models\User;
 use App\Models\UserToken;
 
@@ -36,16 +37,13 @@ class UserController extends Controller {
 			'token' => $token
 		]);
 
-		$model->token = $token;
-
 		return $model;
 	}
 
 	function login () {
 		$user = Auth::user();
+		$user->touchLastLogin();
 
-		return response()->json($user->toArray() + [
-			'token' => $user->tokens()->first()->token
-		]);
+		return $user;
 	}
 }
