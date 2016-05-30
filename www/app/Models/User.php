@@ -18,7 +18,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	static $rules = [
 		'name' => 'required|max:255',
 		'email' => 'required|email',
-		'password' => 'required|confirmed|min:8|max:255'
+		'password' => 'required|min:8|max:255'
 	];
 	protected $fillable = ['name', 'email', 'password'];
 	protected $hidden = ['password', 'remember_token'];
