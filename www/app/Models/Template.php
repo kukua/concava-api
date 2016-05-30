@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Model;
 
-class Template extends Model
-{
+class Template extends Model {
 	static $rules = [
 		'user_id' => 'required|integer',
 		'name' => 'required|max:255'
@@ -15,23 +14,23 @@ class Template extends Model
 	public $relationships = ['user', 'devices', 'attributes'];
 	public $setCurrentUserIdOnCreate = true;
 
-	function user ()
-	{
+	function user () {
 		return $this->belongsTo(User::class);
 	}
 
-	function devices ()
-	{
+	function devices () {
 		return $this->hasMany(Device::class);
 	}
 
-	function attributes ()
-	{
+	function attributes () {
 		return $this->hasMany(Attribute::class);
 	}
 
-	function getUserIdsAttribute ()
-	{
+	function getUserIdsAttribute () {
 		return [(int) $this->user_id];
 	}
+
+	// Cast attributes to correct types
+	function getIdAttribute ($val) { return (int) $val; }
+	function getUserIdAttribute ($val) { return (int) $val; }
 }

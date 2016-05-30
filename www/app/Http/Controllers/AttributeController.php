@@ -1,47 +1,41 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
+use Request;
+use HttpException;
+use InputValidator;
 use App\Models\Attribute;
 use App\Models\Converter;
 use App\Models\Calibrator;
-use App\Models\Validator as ValidatorModel;
-use Request;
-use Validator;
-use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class AttributeController extends Controller
-{
+class AttributeController extends Controller {
 	protected $class = Attribute::class;
 
-	function store ()
-	{
+	function store () {
 		return $this->handleConCaVa(parent::store());
 	}
 
-	function update ($id)
-	{
+	function update ($id) {
 		return $this->handleConCaVa(parent::update($id));
 	}
 
-	function reorder ()
-	{
+	function reorder () {
 		$templateId = (int) Request::input('template_id');
 		$order = (array) Request::input('order');
 
-		if ( ! $templateId)
+		if ( ! $templateId) {
 			throw new HttpException(400, 'Missing template_id.');
-		if ( ! $order)
+		} else if ( ! $order) {
 			throw new HttpException(400, 'Missing order array.');
+		}
 
 		$attributes = Attribute::byTemplate($templateId)
 			->orderBy('order')
 			->get();
 		$j = count($order);
 
-		foreach ($attributes as $attribute)
-		{
+		foreach ($attributes as $attribute) {
 			$i = array_search($attribute->id, $order);
 			$attribute->order = ($i !== false ? $i : $j++);
 			$attribute->save();
@@ -50,12 +44,12 @@ class AttributeController extends Controller
 		return response()->json(null);
 	}
 
-	protected function handleConCaVa ($response)
-	{
+	protected function handleConCaVa ($response) {
 		$model = $response;
 
-		if ( ! ($model instanceof Model))
+		if ( ! ($model instanceof Model)) {
 			return $response;
+		}
 
 		$this->setConverter($model, Request::input('converter'));
 		$this->setCalibrator($model, Request::input('calibrator'));
@@ -64,10 +58,10 @@ class AttributeController extends Controller
 		return $model;
 	}
 
-	protected function setConverter (Model $model, $type)
-	{
-		if (empty($type))
+	protected function setConverter (Model $model, $type) {
+		if (empty($type)) {
 			return;
+		}
 
 		$data = [
 			'attribute_id' => $model->id,
@@ -75,10 +69,9 @@ class AttributeController extends Controller
 			'value' => '',
 			'order' => 0
 		];
-		$validator = Validator::make($data, Converter::$rules);
+		$validator = InputValidator::make($data, Converter::$rules);
 
-		if ($validator->fails())
-		{
+		if ($validator->fails()) {
 			throw new HttpException(400, 'Invalid converter given.');
 		}
 
@@ -86,45 +79,45 @@ class AttributeController extends Controller
 		Converter::create($data);
 	}
 
-	protected function setCalibrator (Model $model, $fn)
-	{
-		if (is_null($fn))
+	protected function setCalibrator (Model $model, $fn) {
+		if (is_null($fn)) {
 			return;
+		}
 
 		$model->calibrators()->delete();
 
-		if (empty($fn))
+		if (empty($fn)) {
 			return;
+		}
 
 		$data = [
 			'attribute_id' => $model->id,
 			'fn' => $fn,
 			'order' => 0
 		];
-		$validator = Validator::make($data, Calibrator::$rules);
+		$validator = InputValidator::make($data, Calibrator::$rules);
 
-		if ($validator->fails())
-		{
+		if ($validator->fails()) {
 			throw new HttpException(400, 'Invalid calibrator given.');
 		}
 
 		Calibrator::create($data);
 	}
 
-	protected function setValidators (Model $model, $types)
-	{
-		if (is_null($types))
+	protected function setValidators (Model $model, $types) {
+		if (is_null($types)) {
 			return;
+		}
 
 		$model->validators()->delete();
 
-		if (empty($types))
+		if (empty($types)) {
 			return;
+		}
 
 		$types = explode(' ', $types);
 
-		foreach ($types as $order => $type)
-		{
+		foreach ($types as $order => $type) {
 			list($type, $value) = explode('=', $type);
 
 			$data = [
@@ -133,14 +126,13 @@ class AttributeController extends Controller
 				'value' => $value,
 				'order' => $order
 			];
-			$validator = Validator::make($data, ValidatorModel::$rules);
+			$validator = InputValidator::make($data, Validator::$rules);
 
-			if ($validator->fails())
-			{
+			if ($validator->fails()) {
 				throw new HttpException(400, 'Invalid validator given.');
 			}
 
-			ValidatorModel::create($data);
+			Validator::create($data);
 		}
 	}
 }

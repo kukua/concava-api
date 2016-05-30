@@ -16,15 +16,15 @@ chmod 600 .env
 # > Edit .env
 cd ../
 docker-compose up -d
-docker-compose run --rm --entrypoint=composer laravel install
-docker-compose run --rm --entrypoint=php laravel artisan migrate
+docker-compose run --rm --entrypoint=composer lumen install
+docker-compose run --rm --entrypoint=php lumen artisan migrate
 sudo chown -R $USER:$USER .
 
 # Update autoloader
-docker-compose run --rm --entrypoint=composer laravel dumpautoload
+docker-compose run --rm --entrypoint=composer lumen dumpautoload
 
 # Test
-docker-compose run --rm --entrypoint=php laravel ./vendor/bin/phpunit
+docker-compose run --rm --entrypoint=php lumen ./vendor/bin/phpunit
 ```
 
 ## License

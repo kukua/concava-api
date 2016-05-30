@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
-abstract class Event
-{
+use Illuminate\Queue\SerializesModels;
+
+abstract class Event {
+    use SerializesModels;
 }

@@ -1,39 +1,33 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
+use QueryException;
+use Model;
+use Auth;
 use App\Models\User;
 use App\Models\UserToken;
-use Auth;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\QueryException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class UserController extends Controller
-{
+class UserController extends Controller {
 	protected $class = User::class;
 
-	protected function registerMiddleware ()
-	{
+	protected function registerMiddleware () {
 		$this->middleware('auth.token', ['except' => ['login', 'store']]);
 		$this->middleware('auth.basic', ['only' => 'login']);
 		$this->middleware('auth.admin', ['except' => ['login', 'store']]);
 	}
 
-	function store ()
-	{
-		try
-		{
+	function store () {
+		try {
 			$model = $response = parent::store();
-		}
-		catch (QueryException $e)
-		{
+		} catch (QueryException $e) {
 			throw new HttpException(400, $e->getPrevious()->getMessage(),
 				$e, $headers = [], $e->getCode());
 		}
 
-		if ( ! ($model instanceof Model))
+		if ( ! ($model instanceof Model)) {
 			return $response;
+		}
 
 		$token = UserToken::randomToken();
 
@@ -47,8 +41,7 @@ class UserController extends Controller
 		return $model;
 	}
 
-	function login ()
-	{
+	function login () {
 		$user = Auth::user();
 
 		return response()->json($user->toArray() + [

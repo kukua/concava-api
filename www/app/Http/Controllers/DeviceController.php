@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
+use Model;
 use App\Models\Device;
-use Illuminate\Database\Eloquent\Model;
 
-class DeviceController extends Controller
-{
+class DeviceController extends Controller {
 	protected $class = Device::class;
 
-	function store ()
-	{
+	function store () {
 		$model = $response = parent::store();
 
 		if ( ! ($model instanceof Model))

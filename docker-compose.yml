@@ -1,4 +1,4 @@
-laravel:
+lumen:
     build: .
     volumes:
         - ./www/:/www
@@ -15,9 +15,9 @@ nginx:
         - ./nginx/fastcgi.conf:/etc/nginx/fastcgi.conf:ro
         - ./nginx/logs/:/logs
     volumes_from:
-        - laravel
+        - lumen
     links:
-        - laravel
+        - lumen
 mariadb:
     image: mariadb:10.1
     env_file: www/.env
