@@ -30,11 +30,21 @@ class UserController extends Controller {
 			return $response;
 		}
 
-		$token = UserToken::randomToken();
+		// Login as newly created user, to update it
+		Auth::login($model);
 
+		// Update active and last_login columns
+		if (config('user.active_by_default')) {
+			$model->is_active = true;
+		}
+
+		$model->touchLastLogin(false);
+		$model->save();
+
+		// Create token for user
 		UserToken::create([
 			'user_id' => $model->id,
-			'token' => $token
+			'token' => UserToken::randomToken()
 		]);
 
 		return $model;

@@ -24,6 +24,7 @@ $app = new Laravel\Lumen\Application(realpath(__DIR__.'/../'));
 $app->configure('app');
 $app->configure('database');
 $app->configure('cache');
+$app->configure('user');
 
 $app->withFacades();
 $app->withEloquent();

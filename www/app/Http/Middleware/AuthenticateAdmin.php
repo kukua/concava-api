@@ -15,6 +15,9 @@ class AuthenticateAdmin {
 	 * @return mixed
 	 */
 	function handle ($request, Closure $next) {
+		if ( ! Auth::user()->is_active) {
+			throw new HttpException(401, 'User account disabled.');
+		}
 		if ( ! Auth::user()->is_admin) {
 			throw new HttpException(401, 'Unauthorized.');
 		}

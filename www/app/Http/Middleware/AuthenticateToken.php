@@ -32,6 +32,9 @@ class AuthenticateToken {
 		if ( ! $user) {
 			throw new HttpException(401, 'Unauthorized.');
 		}
+		if ( ! $user->is_active) {
+			throw new HttpException(401, 'User account disabled.');
+		}
 
 		Auth::login($user);
 

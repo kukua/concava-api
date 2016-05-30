@@ -18,6 +18,9 @@ class AuthenticateBasic {
 		if (Auth::onceBasic()) {
 			throw new HttpException(401, 'Invalid credentials.');
 		}
+		if ( ! Auth::user()->is_active) {
+			throw new HttpException(401, 'User account disabled.');
+		}
 
 		return $next($request);
 	}

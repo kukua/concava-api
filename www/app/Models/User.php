@@ -70,6 +70,6 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	// Cast attributes to correct types
 	function getIdAttribute ($val) { return (int) $val; }
-	function getActiveAttribute ($val) { return (bool) $val; }
+	function getIsActiveAttribute ($val) { return (bool) $val; }
 	function getIsAdminAttribute ($val) { return (bool) $val; }
 }
