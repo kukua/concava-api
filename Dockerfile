@@ -1,5 +1,5 @@
 FROM matriphe/alpine-php:fpm
-MAINTAINER Kukua Team <info@kukua.cc>
+MAINTAINER Kukua Team <dev@kukua.cc>
 
 ENV TIMEZONE Europe/Amsterdam
 RUN apk add --update tzdata && \
