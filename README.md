@@ -29,6 +29,6 @@ docker-compose run --rm --entrypoint=php lumen ./vendor/bin/phpunit
 
 ## License
 
-This software is licensed under the [MIT license](https://github.com/kukua/concava/blob/master/LICENSE).
+This software is licensed under the [MIT license](https://github.com/kukua/concava-api/blob/master/LICENSE).
 
 © 2016 Kukua BV
