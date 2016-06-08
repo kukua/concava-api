@@ -125,6 +125,7 @@ return [
 		Arubacao\BasicAuth\BasicGuardServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
 		GrahamCampbell\Throttle\ThrottleServiceProvider::class,
+		Zizaco\Entrust\EntrustServiceProvider::class,
 
 	],
 
@@ -148,6 +149,7 @@ return [
 		'Request' => Illuminate\Support\Facades\Request::class,
 		'InputValidator' => Illuminate\Support\Facades\Validator::class,
 		'Throttle' => GrahamCampbell\Throttle\Facades\Throttle::class,
+		'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
 
 	],
 

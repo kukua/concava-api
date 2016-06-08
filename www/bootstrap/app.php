@@ -25,6 +25,7 @@ $app->configure('app');
 $app->configure('database');
 $app->configure('cache');
 $app->configure('user');
+$app->configure('entrust');
 
 $app->withFacades();
 $app->withEloquent();
@@ -71,6 +72,10 @@ $app->routeMiddleware([
 	'auth.admin' => App\Http\Middleware\AuthenticateAdmin::class,
 	'auth.token' => App\Http\Middleware\AuthenticateToken::class,
 	'auth.basic' => App\Http\Middleware\AuthenticateBasic::class,
+
+	'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
+	'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
+	'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 ]);
 
 /*

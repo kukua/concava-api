@@ -10,7 +10,8 @@
         "vlucas/phpdotenv": "~2.2",
         "arubacao/http-basic-auth-guard": "^1.0",
         "doctrine/dbal": "^2.5",
-        "graham-campbell/throttle": "^5.2"
+        "graham-campbell/throttle": "^5.2",
+        "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
