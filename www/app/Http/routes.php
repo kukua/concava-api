@@ -1,5 +1,8 @@
 <?php
 
+$app->options('{route:.*}', function () {
+	return response()->json();
+});
 $app->get('users/login', ['as' => 'users.login', 'uses' => 'UserController@login']);
 resource('users', 'UserController');
 resource('devices', 'DeviceController');
