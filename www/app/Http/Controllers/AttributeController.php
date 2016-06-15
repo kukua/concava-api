@@ -9,6 +9,7 @@ use Model;
 use App\Models\Attribute;
 use App\Models\Converter;
 use App\Models\Calibrator;
+use App\Models\Validator;
 
 class AttributeController extends Controller {
 	protected $class = Attribute::class;
