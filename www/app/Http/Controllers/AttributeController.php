@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Request;
 use HttpException;
 use InputValidator;
+use Model;
 use App\Models\Attribute;
 use App\Models\Converter;
 use App\Models\Calibrator;
