@@ -19,7 +19,7 @@ class UserToken extends Model {
 	}
 
 	function user () {
-		return $this->belongsTo(User::class, 'user_devices');
+		return $this->belongsTo(User::class);
 	}
 
 	function getUserIdsAttribute () {
