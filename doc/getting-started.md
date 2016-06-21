@@ -22,7 +22,7 @@ For example: `20e03e57 ea00 0f` (1463738400, 234, 15)
 ## Step 2: Register user
 
 ```bash
-curl -v -XPOST http://<host>/users -H 'Content-Type: application/json' \
+curl -v -XPOST http://<host>/v1/users -H 'Content-Type: application/json' \
 	-d '{"name": "John Doe", "email": "john@example.com", "password": "securepassword", "password_confirmation": "securepassword"}'
 # {"id": 123, ..., "token": "<auth token>"}
 ```
@@ -30,14 +30,14 @@ curl -v -XPOST http://<host>/users -H 'Content-Type: application/json' \
 Later on, you can again retrieve the token with:
 
 ```bash
-curl -v http://<host>/users/login -H 'Authorization: Basic <base64 encoded <email>:<password>>'
+curl -v http://<host>/v1/users/login -H 'Authorization: Basic <base64 encoded <email>:<password>>'
 # {"id": 110, ..., "token": "<auth token>"}
 ```
 
 ## Step 3: Create template
 
 ```bash
-curl -v -XPOST http://<host>/templates -H 'Content-Type: application/json' \
+curl -v -XPOST http://<host>/v1/templates -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
 	-d '{"name": "My template"}'
 # {"id": 120, ...}
 ```
@@ -45,13 +45,13 @@ curl -v -XPOST http://<host>/templates -H 'Content-Type: application/json' \
 ## Step 4: Add attributes to template
 
 ```bash
-curl -v -XPOST http://<host>/attributes -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
+curl -v -XPOST http://<host>/v1/attributes -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
 	-d '{"template_id": 120, "name": "timestamp", "order": 0, "converter":"uint32le"}'
 # {"id": 130, ...}
-curl -v -XPOST http://<host>/attributes -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
+curl -v -XPOST http://<host>/v1/attributes -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
 	-d '{"template_id": 120, "name": "temp", "order": 1, "converter":"int16le", "calibrator": "return value / 10", "validators": "min=-100 max=100"}'
 # {"id": 131, ...}
-curl -v -XPOST http://<host>/attributes -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
+curl -v -XPOST http://<host>/v1/attributes -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
 	-d '{"template_id": 120, "name": "distance", "order": 2, "converter":"uint8", "validators": "min=0 max=80"}'
 # {"id": 132, ...}
 ```
@@ -59,7 +59,7 @@ curl -v -XPOST http://<host>/attributes -H 'Content-Type: application/json' -H '
 ## Step 5: Create device
 
 ```bash
-curl -v -XPOST http://<host>/devices -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
+curl -v -XPOST http://<host>/v1/devices -H 'Content-Type: application/json' -H 'Authorization: Token <auth token>' \
 	-d '{"template_id": 120, "name": "My device", "udid": "<device id>"}'
 # {"id": 140, ...}
 ```

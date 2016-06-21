@@ -131,36 +131,36 @@
 </ul>
 <p>For example: <code>20e03e57 ea00 0f</code> (1463738400, 234, 15)</p>
 <h2 id="step-2-register-user">Step 2: Register user</h2>
-<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/users -H 'Content-Type: application/json' \
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/v1/users -H 'Content-Type: application/json' \
     -d '{&quot;name&quot;: &quot;John Doe&quot;, &quot;email&quot;: &quot;john@example.com&quot;, &quot;password&quot;: &quot;securepassword&quot;, &quot;password_confirmation&quot;: &quot;securepassword&quot;}'
 # {&quot;id&quot;: 123, ..., &quot;token&quot;: &quot;&lt;auth token&gt;&quot;}
 </code></pre>
 
 <p>Later on, you can again retrieve the token with:</p>
-<pre><code class="bash">curl -v http://&lt;host&gt;/users/login -H 'Authorization: Basic &lt;base64 encoded &lt;email&gt;:&lt;password&gt;&gt;'
+<pre><code class="bash">curl -v http://&lt;host&gt;/v1/users/login -H 'Authorization: Basic &lt;base64 encoded &lt;email&gt;:&lt;password&gt;&gt;'
 # {&quot;id&quot;: 110, ..., &quot;token&quot;: &quot;&lt;auth token&gt;&quot;}
 </code></pre>
 
 <h2 id="step-3-create-template">Step 3: Create template</h2>
-<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/templates -H 'Content-Type: application/json' \
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/v1/templates -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
     -d '{&quot;name&quot;: &quot;My template&quot;}'
 # {&quot;id&quot;: 120, ...}
 </code></pre>
 
 <h2 id="step-4-add-attributes-to-template">Step 4: Add attributes to template</h2>
-<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/v1/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
     -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;timestamp&quot;, &quot;order&quot;: 0, &quot;converter&quot;:&quot;uint32le&quot;}'
 # {&quot;id&quot;: 130, ...}
-curl -v -XPOST http://&lt;host&gt;/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+curl -v -XPOST http://&lt;host&gt;/v1/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
     -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;temp&quot;, &quot;order&quot;: 1, &quot;converter&quot;:&quot;int16le&quot;, &quot;calibrator&quot;: &quot;return value / 10&quot;, &quot;validators&quot;: &quot;min=-100 max=100&quot;}'
 # {&quot;id&quot;: 131, ...}
-curl -v -XPOST http://&lt;host&gt;/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+curl -v -XPOST http://&lt;host&gt;/v1/attributes -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
     -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;distance&quot;, &quot;order&quot;: 2, &quot;converter&quot;:&quot;uint8&quot;, &quot;validators&quot;: &quot;min=0 max=80&quot;}'
 # {&quot;id&quot;: 132, ...}
 </code></pre>
 
 <h2 id="step-5-create-device">Step 5: Create device</h2>
-<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/devices -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
+<pre><code class="bash">curl -v -XPOST http://&lt;host&gt;/v1/devices -H 'Content-Type: application/json' -H 'Authorization: Token &lt;auth token&gt;' \
     -d '{&quot;template_id&quot;: 120, &quot;name&quot;: &quot;My device&quot;, &quot;udid&quot;: &quot;&lt;device id&gt;&quot;}'
 # {&quot;id&quot;: 140, ...}
 </code></pre>
