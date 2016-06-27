@@ -28,8 +28,11 @@ class Controller extends BaseController {
 		// Filtering
 		if ($filters = Request::input('filter')) {
 			foreach (explode(',', $filters) as $filter) {
-				list($column, $value) = explode(':', $filter);
-				$query->where($column, '=', $value);
+				$parts = explode(':', $filter);
+				if (count($parts) !== 2) {
+					throw new HttpException(400, "Invalid filter '$filter'.");
+				}
+				$query->where($parts[0], '=', $parts[1]);
 			}
 		}
 
