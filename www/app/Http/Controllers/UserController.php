@@ -47,6 +47,8 @@ class UserController extends Controller {
 			'token' => UserToken::randomToken()
 		]);
 
+		$this->addIncludes($model);
+
 		return $model;
 	}
 

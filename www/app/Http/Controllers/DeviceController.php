@@ -17,6 +17,8 @@ class DeviceController extends Controller {
 		$model->users()->attach($model->user_id);
 		unset($model->users);
 
+		$this->addIncludes($model);
+
 		return $model;
 	}
 }

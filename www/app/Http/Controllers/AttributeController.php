@@ -57,6 +57,8 @@ class AttributeController extends Controller {
 		$this->setCalibrator($model, Request::input('calibrator'));
 		$this->setValidators($model, Request::input('validators'));
 
+		$this->addIncludes($model);
+
 		return $model;
 	}
 
