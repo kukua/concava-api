@@ -8,9 +8,21 @@ use DB;
 use Schema;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
-class MeasurementTableController {
+class MeasurementTableController extends BaseController {
 	public static $connection = 'mysql-measurements';
+
+	function __construct () {
+		$this->middleware('auth.token', ['only' => 'newMeasurementTable']);
+	}
+
+	function newMeasurementTable ($id) {
+		$device = Device::findOrFail($id);
+
+		$this->backupTable($device);
+		$this->createTable($device);
+	}
 
 	function onDeviceCreated (Device $device) {
 		$this->createTable($device);
