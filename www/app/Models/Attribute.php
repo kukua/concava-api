@@ -29,15 +29,15 @@ class Attribute extends Model {
 	}
 
 	function converters () {
-		return $this->hasMany(Converter::class);
+		return $this->hasMany(Converter::class)->orderBy('order');
 	}
 
 	function calibrators () {
-		return $this->hasMany(Calibrator::class);
+		return $this->hasMany(Calibrator::class)->orderBy('order');
 	}
 
 	function validators () {
-		return $this->hasMany(Validator::class);
+		return $this->hasMany(Validator::class)->orderBy('order');
 	}
 
 	function getUserIdsAttribute () {

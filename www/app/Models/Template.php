@@ -23,7 +23,7 @@ class Template extends Model {
 	}
 
 	function attributes () {
-		return $this->hasMany(Attribute::class);
+		return $this->hasMany(Attribute::class)->orderBy('order');
 	}
 
 	function getUserIdsAttribute () {
