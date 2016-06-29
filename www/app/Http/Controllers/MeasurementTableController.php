@@ -73,7 +73,7 @@ class MeasurementTableController extends BaseController {
 
 		switch ($type) {
 			case 'float':
-				return $table->float($name, 8, 8)->nullable();
+				return $table->float($name, 0, 0)->nullable();
 
 			case 'timestamp':
 				return $table->timestamp($name)->nullable(false)->default('0000-00-00 00:00:00');
