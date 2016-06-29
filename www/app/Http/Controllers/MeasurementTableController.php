@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\Attribute;
-use Schema;
 use DB;
+use Schema;
 use Illuminate\Database\QueryException;
 use Illuminate\Database\Schema\Blueprint;
 
-class SynchronizeMeasurementTablesListener {
-	protected $connection = 'mysql-measurements';
+class MeasurementTableController {
+	public static $connection = 'mysql-measurements';
 
 	function onDeviceCreated (Device $device) {
 		$this->createTable($device);
@@ -67,9 +67,13 @@ class SynchronizeMeasurementTablesListener {
 		return $column;
 	}
 
+	protected function getSchema () {
+		return Schema::connection(static::$connection);
+	}
+
 	protected function renameTable ($from, $to) {
 		try {
-			Schema::connection($this->connection)->rename($from, $to);
+			$this->getSchema()->rename($from, $to);
 			return true;
 		} catch (QueryException $e) {
 			return false;
@@ -89,7 +93,7 @@ class SynchronizeMeasurementTablesListener {
 
 	protected function createTable (Device $device) {
 		$self = $this;
-		$conn = Schema::connection($this->connection);
+		$conn = $this->getSchema();
 
 		$conn->create($this->getTableName($device), function (Blueprint $table) use ($self, $device) {
 			// Add timestamp column
@@ -112,7 +116,7 @@ class SynchronizeMeasurementTablesListener {
 
 	protected function addTableColumn (Device $device, Attribute $attribute) {
 		$self = $this;
-		$conn = Schema::connection($this->connection);
+		$conn = $this->getSchema();
 		$table = $this->getTableName($device);
 
 		// Create if not exists
@@ -151,7 +155,7 @@ class SynchronizeMeasurementTablesListener {
 
 	protected function updateTableColumn (Device $device, Attribute $attribute) {
 		$self = $this;
-		$conn = Schema::connection($this->connection);
+		$conn = $this->getSchema();
 
 		$conn->table($this->getTableName($device), function (Blueprint $table) use ($self, $device, $attribute) {
 			// Recreate table on type change
@@ -171,34 +175,5 @@ class SynchronizeMeasurementTablesListener {
 				$table->renameColumn($oldName, $name);
 			}
 		});
-	}
-
-	function subscribe ($events) {
-		$conn = $this->connection;
-
-		if ( ! config("database.connections.$conn.enabled")) {
-			return;
-		}
-
-		$events->listen(
-			'eloquent.created: App\Models\Device',
-			'App\Listeners\SynchronizeMeasurementTablesListener@onDeviceCreated'
-		);
-		$events->listen(
-			'eloquent.updated: App\Models\Device',
-			'App\Listeners\SynchronizeMeasurementTablesListener@onDeviceUpdated'
-		);
-		$events->listen(
-			'eloquent.deleted: App\Models\Device',
-			'App\Listeners\SynchronizeMeasurementTablesListener@onDeviceDeleted'
-		);
-		$events->listen(
-			'eloquent.created: App\Models\Attribute',
-			'App\Listeners\SynchronizeMeasurementTablesListener@onAttributeCreated'
-		);
-		$events->listen(
-			'eloquent.updated: App\Models\Attribute',
-			'App\Listeners\SynchronizeMeasurementTablesListener@onAttributeUpdated'
-		);
 	}
 }
