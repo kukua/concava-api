@@ -70,13 +70,17 @@ class MeasurementTableController extends BaseController {
 
 	protected function addColumn ($table, $name) {
 		$type = $this->getColumnType($name);
-		$column = $table->$type($name)->nullable();
 
-		if ($type === 'timestamp') {
-			$column->nullable(false)->default('0000-00-00 00:00:00');
+		switch ($type) {
+			case 'float':
+				return $table->float($name, 8, 8)->nullable();
+
+			case 'timestamp':
+				return $table->timestamp($name)->nullable(false)->default('0000-00-00 00:00:00');
+
+			default:
+				return $table->$type($name)->nullable();
 		}
-
-		return $column;
 	}
 
 	protected function getSchema () {
