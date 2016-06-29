@@ -60,6 +60,21 @@ return [
 			'engine' => null,
 		],
 
+		'mysql-measurements' => [
+			'enabled' => (bool) env('MYSQL_MEASUREMENTS_ENABLED', false),
+			'driver' => 'mysql',
+			'host' => env('MYSQL_MEASUREMENTS_HOST', env('MYSQL_HOST', 'localhost')),
+			'port' => env('MYSQL_MEASUREMENTS_PORT', '3306'),
+			'database' => env('MYSQL_MEASUREMENTS_DATABASE', 'measurements'),
+			'username' => env('MYSQL_MEASUREMENTS_USER', 'root'),
+			'password' => env('MYSQL_MEASUREMENTS_PASSWORD', env('MYSQL_ROOT_PASSWORD', '')),
+			'charset' => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix' => '',
+			'strict' => false,
+			'engine' => null,
+		],
+
 	],
 
 	/*

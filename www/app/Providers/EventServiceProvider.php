@@ -18,5 +18,6 @@ class EventServiceProvider extends ServiceProvider {
 
 	protected $subscribe = [
 		'App\Listeners\ModelEventListener',
+		'App\Listeners\SynchronizeMeasurementTablesListener',
 	];
 }

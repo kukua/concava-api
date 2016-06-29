@@ -30,7 +30,7 @@ class Device extends Model {
 	}
 
 	function getUserIdsAttribute () {
-		return $this->users->pluck('id')->toArray() + [(int) $this->user_id];
+		return $this->users()->pluck('id')->toArray() + [(int) $this->user_id];
 	}
 
 	// Cast attributes to correct types

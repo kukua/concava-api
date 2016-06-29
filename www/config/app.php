@@ -143,10 +143,10 @@ return [
 
 		'Hash' => Illuminate\Support\Facades\Hash::class,
 		'HttpException' => Symfony\Component\HttpKernel\Exception\HttpException::class,
+		'InputValidator' => Illuminate\Support\Facades\Validator::class,
 		'Model' => Illuminate\Database\Eloquent\Model::class,
 		'QueryException' => Illuminate\Database\QueryException::class,
 		'Request' => Illuminate\Support\Facades\Request::class,
-		'InputValidator' => Illuminate\Support\Facades\Validator::class,
 		'Throttle' => GrahamCampbell\Throttle\Facades\Throttle::class,
 
 	],
