@@ -1,0 +1,169 @@
+FORMAT: 1A
+HOST: http://d.kukua.tech:8080/
+
+
+# ConCaVa API
+
+The ConCaVa API allows you to configure ConCaVa metadata.
+
+TODO:
+
+- Users
+    - GET /v1/users/login
+        - ~~200~~
+        - 401
+    - ~~POST~~
+        - ~~200~~
+        - ~~400~~
+- Templates
+    - GET
+    - POST
+    - PUT
+    - DELETE
+- Attributes
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - PUT /v1/attributes/reorder
+- Devices
+    - GET
+    - POST
+    - PUT
+    - DELETE
+- Filters
+- Orders
+- Includes
+
+## Users [/v1/users]
+
+### Log In User [GET /v1/users/login]
+
+Retrieve user information by providing a Basic Authentication header.
+The token can be used for authenticating subsequent requests.
+
++ Request
+
+    + Headers
+    
+            Authorization: Basic <base64 encoded <email>:<password>>
+        
++ Response 200 (application/json)
+
+        {
+            "id": 13,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "is_active": true,
+            "is_admin": false,
+            "token": "d352d3843fe50e5dc14a3fe0d228da25",
+            "last_login": "2016-07-12 14:41:48",
+            "created_at": "2016-07-12 14:41:48",
+            "updated_at": "2016-07-12 14:41:48",
+        }
+
+### Register User [POST]
+
+Registering your own user account is required to create and modify the other entities.
+The API has an option for open registration,
+so everyone can use the API (found in the `www/.env` file).
+
++ Request (application/json)
+
+        {
+            "name": "John Doe",
+            "email": "john@example.com",
+            "password": "securepassword"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "id": 13,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "is_active": true,
+            "is_admin": false,
+            "token": "d352d3843fe50e5dc14a3fe0d228da25",
+            "last_login": "2016-07-12 14:41:48",
+            "created_at": "2016-07-12 14:41:48",
+            "updated_at": "2016-07-12 14:41:48",
+        }
+        
++ Request (application/json)
+
+        {
+            "name": "John Doe"
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "messages": {
+                "email": ["The email field is required."],
+                "password": ["The password field is required."]
+            }
+        }
+        
+## Templates [/v1/templates]
+
+### List Templates [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                TODO
+            },
+            ...
+        ]
+
+### Create Template [POST]
+
+### Update Template [PUT]
+
+### Delete Template [DELETE]
+
+Deleting a template also deletes it's attributes.
+
+## Attributes [/v1/attributes]
+
+### List Attributes [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                TODO
+            },
+            ...
+        ]
+
+### Create Attribute [POST]
+
+### Update Attribute [PUT]
+
+### Delete Attribute [DELETE]
+
+### Reorder Attributes [PUT /v1/attributes/reorder]
+
+Specify attribute order by providing an array with attribute IDs.
+
+## Devices [/v1/devices]
+
+### List Devices [GET]
+
++ Response 200 (application/json)
+
+        [
+            {
+                TODO
+            },
+            ...
+        ]
+
+### Create Device [POST]
+
+### Update Device [PUT]
+
+### Delete Device [DELETE]
