@@ -4,38 +4,150 @@ HOST: http://d.kukua.tech:8080/
 
 # ConCaVa API
 
-The ConCaVa API allows you to configure ConCaVa metadata.
+The ConCaVa API allows you to manage ConCaVa metadata.
 
-TODO:
+## Query parameters [/query-params]
 
-- Users
-    - GET /v1/users/login
-        - ~~200~~
-        - 401
-    - ~~POST~~
-        - ~~200~~
-        - ~~400~~
-- Templates
-    - GET
-    - POST
-    - PUT
-    - DELETE
-- Attributes
-    - GET
-    - POST
-    - PUT
-    - DELETE
-    - PUT /v1/attributes/reorder
-- Devices
-    - GET
-    - POST
-    - PUT
-    - DELETE
-- Filters
-- Orders
-- Includes
+### Filtering [GET /v1/devices?filter=template_id:2]
+
+Use the `filter` query parameter. Use `key:value` pairs. Comma separated.
+
++ Request
+
+    + Headers
+            
+            Authorization: Basic <base64 encoded <email>:<password>>
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": 3,
+                "template_id": 1,
+                ...
+            },
+            {
+                "id": 4,
+                "template_id": 2,
+                ...
+            },
+            {
+                "id": 5,
+                "template_id": 3,
+                ...
+            },
+            ...
+        }
+
+### Ordering [GET /v1/devices?order=name]
+
+Use the `order` query parameter. Comma separated.
+For a descending order prefix with a dash, like: `-udid`.
+
++ Request
+
+    + Headers
+            
+            Authorization: Basic <base64 encoded <email>:<password>>
+
++ Response 200 (application/json)
+
+        [
+            {
+                "name": "Template A",
+                "udid": "0000000000000001",
+                ...
+            },
+            {
+                "name": "Template B",
+                "udid": "0000000000000002",
+                ...
+            },
+            ...
+        }
+
+### Including relationships [GET /v1/devices?include=template]
+
+Use the `include` query parameter. Comma separated.
+Use dots for including sub relations, like: `template.attributes`.
+
++ Request
+
+    + Headers
+            
+            Authorization: Basic <base64 encoded <email>:<password>>
+
++ Response 200 (application/json)
+
+        {
+            "id": 4,
+            "udid": "0000000000000001",
+            ...
+            "template": {
+                "id": 2,
+                "user_id": 1,
+                "name": "My Template",
+                "created_at": "2016-07-12 15:21:05",
+                "updated_at": "2016-07-12 15:21:05"
+            }
+        }
+
+## Error responses [/errors]
+
+General error responses that apply to all resources. These examples are for the devices.
+
+### Create Device [POST /v1/devices]
+
++ Request (application/json)
+
+        {
+            "name": "John Doe"
+        }
+        
++ Response 400 (application/json)
+
+        {
+            "messages": {
+                "email": ["The email field is required."],
+                "password": ["The password field is required."]
+            }
+        }
+
+### Delete Device Of Other Account [DELETE /v1/devices/1]
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "code": 0,
+            "message": "Not allowed to delete entity."
+        }
+        
+### Delete Non-Existing Device [DELETE /v1/devices/1234]
+        
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "code": 0,
+            "message": "Entity not found."
+        }
 
 ## Users [/v1/users]
+
+Relationships: `devices`, `templates`, and `tokens`.
 
 ### Log In User [GET /v1/users/login]
 
@@ -51,7 +163,7 @@ The token can be used for authenticating subsequent requests.
 + Response 200 (application/json)
 
         {
-            "id": 13,
+            "id": 1,
             "name": "John Doe",
             "email": "john@example.com",
             "is_active": true,
@@ -60,6 +172,20 @@ The token can be used for authenticating subsequent requests.
             "last_login": "2016-07-12 14:41:48",
             "created_at": "2016-07-12 14:41:48",
             "updated_at": "2016-07-12 14:41:48",
+        }
+        
++ Request
+
+    + Headers
+            
+            Authorization: Basic <base64 encoded <invalid email>:<invalid password>>
+
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "code": 0,
+            "message": "Invalid credentials."
         }
 
 ### Register User [POST]
@@ -79,7 +205,7 @@ so everyone can use the API (found in the `www/.env` file).
 + Response 200 (application/json)
 
         {
-            "id": 13,
+            "id": 1,
             "name": "John Doe",
             "email": "john@example.com",
             "is_active": true,
@@ -90,80 +216,313 @@ so everyone can use the API (found in the `www/.env` file).
             "updated_at": "2016-07-12 14:41:48",
         }
         
-+ Request (application/json)
-
-        {
-            "name": "John Doe"
-        }
-        
-+ Response 400 (application/json)
-
-        {
-            "messages": {
-                "email": ["The email field is required."],
-                "password": ["The password field is required."]
-            }
-        }
-        
 ## Templates [/v1/templates]
+
+Relationships: `user`, `devices`, and `attributes`.
 
 ### List Templates [GET]
 
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
 + Response 200 (application/json)
 
         [
             {
-                TODO
+                "id": 2,
+                "user_id": 1,
+                "name": "My Template",
+                "created_at": "2016-07-12 15:21:05",
+                "updated_at": "2016-07-12 15:21:05"
             },
             ...
         ]
 
 ### Create Template [POST]
 
-### Update Template [PUT]
++ Request (application/json)
 
-### Delete Template [DELETE]
+    + Headers
+    
+            Authorization: Token <token>
+    
+    + Body
+    
+            {
+                "name": "My Template"
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "id": 2,
+            "user_id": 1,
+            "name": "My Template",
+            "created_at": "2016-07-12 15:21:05",
+            "updated_at": "2016-07-12 15:21:05"
+        }
+
+### Update Template [PUT /v1/templates/{id}]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Token <token>
+    
+    + Body
+    
+            {
+                "name": "Other Name For My Template"
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "id": 2,
+            "user_id": 1,
+            "name": "Other Name For My Template",
+            "created_at": "2016-07-12 15:21:05",
+            "updated_at": "2016-07-12 15:21:05"
+        }
+        
+### Delete Template [DELETE /v1/templates/{id}]
 
 Deleting a template also deletes it's attributes.
 
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 200 (application/json)
+
+        {
+            "id": 2,
+            "user_id": 1,
+            "name": "My Template",
+            "created_at": "2016-07-12 15:21:05",
+            "updated_at": "2016-07-12 15:21:05"
+        }
+        
 ## Attributes [/v1/attributes]
+
+Relationships: `template`, `converters`, `calibrators`, and `validators`.
 
 ### List Attributes [GET]
 
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
 + Response 200 (application/json)
 
         [
             {
-                TODO
+                "id": 3,
+                "template_id": 2,
+                "name": "temperature",
+                "order": 0,
+                "created_at": "2016-07-12 15:27:21",
+                "updated_at": "2016-07-12 15:27:21"
             },
             ...
         ]
 
 ### Create Attribute [POST]
 
-### Update Attribute [PUT]
++ Request (application/json)
 
-### Delete Attribute [DELETE]
+    + Headers
+    
+            Authorization: Token <token>
+    
+    + Body
+    
+            {
+                "template_id": 2,
+                "name": "temperature",
+                "order": 0,
+                "converter": "int16le",
+                "calibrator": "return value / 10",
+                "validators": "min=-100 max=100"
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "id": 3,
+            "template_id": 2,
+            "name": "temperature",
+            "order": 0,
+            "created_at": "2016-07-12 15:27:21",
+            "updated_at": "2016-07-12 15:27:21"
+        }
+
+### Update Attribute [PUT /v1/attributes/{id}]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Token <token>
+    
+    + Body
+    
+            {
+                "name": "temp"
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "id": 3,
+            "template_id": 2,
+            "name": "temp",
+            "order": 0,
+            "created_at": "2016-07-12 15:27:21",
+            "updated_at": "2016-07-12 15:27:21"
+        }
+        
+### Delete Attribute [DELETE /v1/attributes/{id}]
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 200 (application/json)
+
+        {
+            "id": 3,
+            "template_id": 2,
+            "name": "temperature",
+            "order": 0,
+            "created_at": "2016-07-12 15:27:21",
+            "updated_at": "2016-07-12 15:27:21"
+        }
 
 ### Reorder Attributes [PUT /v1/attributes/reorder]
 
-Specify attribute order by providing an array with attribute IDs.
+Specify attribute order by providing a template ID and array with attribute IDs.
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
+    + Body
+    
+            {
+                "template_id": 2,
+                "order": [3, 2, 1]
+            }
+            
++ Response 200 (application/json)
+
+        {}
 
 ## Devices [/v1/devices]
 
+Relationships: `users` and `template`.
+
 ### List Devices [GET]
 
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
 + Response 200 (application/json)
 
         [
             {
-                TODO
+                "id": 4,
+                "template_id": 2,
+                "name": "My Device",
+                "udid": "0000000000000001"
+                "created_at": "2016-07-12 15:29:45",
+                "updated_at": "2016-07-12 15:29:45"
             },
             ...
         ]
 
 ### Create Device [POST]
 
-### Update Device [PUT]
++ Request (application/json)
 
-### Delete Device [DELETE]
+    + Headers
+    
+            Authorization: Token <token>
+    
+    + Body
+    
+            {
+                "template_id": 2,
+                "name": "My Device",
+                "udid": "0000000000000001"
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "id": 4,
+            "template_id": 2,
+            "name": "My Device",
+            "udid": "0000000000000001"
+            "created_at": "2016-07-12 15:29:45",
+            "updated_at": "2016-07-12 15:29:45"
+        }
+
+### Update Device [PUT /v1/devices/{id}]
+
++ Request (application/json)
+
+    + Headers
+    
+            Authorization: Token <token>
+    
+    + Body
+    
+            {
+                "name": "Other Name For My Device"
+            }
+            
++ Response 200 (application/json)
+
+        {
+            "id": 4,
+            "template_id": 2,
+            "name": "Other Name For My Device",
+            "udid": "0000000000000001"
+            "created_at": "2016-07-12 15:29:45",
+            "updated_at": "2016-07-12 15:29:45"
+        }
+
+### Delete Device [DELETE /v1/devices/{id}]
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 200 (application/json)
+
+        {
+            "id": 4,
+            "template_id": 2,
+            "name": "My Device",
+            "udid": "0000000000000001"
+            "created_at": "2016-07-12 15:29:45",
+            "updated_at": "2016-07-12 15:29:45"
+        }
