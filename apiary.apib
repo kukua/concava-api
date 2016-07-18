@@ -6,6 +6,8 @@ HOST: http://d.kukua.tech:8080/
 
 The ConCaVa API allows you to manage ConCaVa metadata.
 
+The documentation for ConCaVa can be found here: https://kukua.github.io/concava/.
+
 ## Query parameters [/query-params]
 
 ### Filtering [GET /v1/devices?filter=template_id:2]
@@ -95,7 +97,40 @@ Use dots for including sub relations, like: `template.attributes`.
 ## Error responses [/errors]
 
 General error responses that apply to all resources. These examples are for the devices.
+        
 
+### Unauthorized request [GET /v1/devices/1]
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <invalid token>
+            
++ Response 401 (application/json)
+
+        {
+            "status": 401,
+            "code": 0,
+            "message": "Unauthorized."
+        }
+
+### Find/Update/Delete Non-Existing Device [GET /v1/devices/1234]
+        
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 404 (application/json)
+
+        {
+            "status": 404,
+            "code": 0,
+            "message": "Entity not found."
+        }
+        
 ### Create Device [POST /v1/devices]
 
 + Request (application/json)
@@ -112,7 +147,7 @@ General error responses that apply to all resources. These examples are for the 
                 "password": ["The password field is required."]
             }
         }
-
+        
 ### Delete Device Of Other Account [DELETE /v1/devices/1]
 
 + Request
@@ -127,22 +162,6 @@ General error responses that apply to all resources. These examples are for the 
             "status": 401,
             "code": 0,
             "message": "Not allowed to delete entity."
-        }
-        
-### Delete Non-Existing Device [DELETE /v1/devices/1234]
-        
-+ Request
-
-    + Headers
-    
-            Authorization: Token <token>
-            
-+ Response 404 (application/json)
-
-        {
-            "status": 404,
-            "code": 0,
-            "message": "Entity not found."
         }
 
 ## Users [/v1/users]
@@ -240,6 +259,28 @@ Relationships: `user`, `devices`, and `attributes`.
             },
             ...
         ]
+        
+### Get Template [GET /v1/templates/{id}]
+
++ Parameters
+
+    + id (number) - ID of the template
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 200 (application/json)
+
+        {
+            "id": 2,
+            "user_id": 1,
+            "name": "My Template",
+            "created_at": "2016-07-12 15:21:05",
+            "updated_at": "2016-07-12 15:21:05"
+        }
 
 ### Create Template [POST]
 
@@ -267,6 +308,10 @@ Relationships: `user`, `devices`, and `attributes`.
 
 ### Update Template [PUT /v1/templates/{id}]
 
++ Parameters
+
+    + id (number) - ID of the template
+
 + Request (application/json)
 
     + Headers
@@ -292,6 +337,10 @@ Relationships: `user`, `devices`, and `attributes`.
 ### Delete Template [DELETE /v1/templates/{id}]
 
 Deleting a template also deletes it's attributes.
+
++ Parameters
+
+    + id (number) - ID of the template
 
 + Request
 
@@ -334,6 +383,29 @@ Relationships: `template`, `converters`, `calibrators`, and `validators`.
             },
             ...
         ]
+        
+### Get Attribute [GET /v1/attributes/{id}]
+
++ Parameters
+
+    + id (number) - ID of the attribute
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 200 (application/json)
+
+        {
+            "id": 3,
+            "template_id": 2,
+            "name": "temperature",
+            "order": 0,
+            "created_at": "2016-07-12 15:27:21",
+            "updated_at": "2016-07-12 15:27:21"
+        }
 
 ### Create Attribute [POST]
 
@@ -350,7 +422,7 @@ Relationships: `template`, `converters`, `calibrators`, and `validators`.
                 "name": "temperature",
                 "order": 0,
                 "converter": "int16le",
-                "calibrator": "return value / 10",
+                "calibrator": "return val / 10",
                 "validators": "min=-100 max=100"
             }
             
@@ -366,6 +438,10 @@ Relationships: `template`, `converters`, `calibrators`, and `validators`.
         }
 
 ### Update Attribute [PUT /v1/attributes/{id}]
+
++ Parameters
+
+    + id (number) - ID of the attribute
 
 + Request (application/json)
 
@@ -391,6 +467,10 @@ Relationships: `template`, `converters`, `calibrators`, and `validators`.
         }
         
 ### Delete Attribute [DELETE /v1/attributes/{id}]
+
++ Parameters
+
+    + id (number) - ID of the attribute
 
 + Request
 
@@ -455,6 +535,29 @@ Relationships: `users` and `template`.
             },
             ...
         ]
+        
+### Get Device [GET /v1/devices/{id}]
+
++ Parameters
+
+    + id (number) - ID of the device
+
++ Request
+
+    + Headers
+    
+            Authorization: Token <token>
+            
++ Response 200 (application/json)
+
+        {
+            "id": 4,
+            "template_id": 2,
+            "name": "My Device",
+            "udid": "0000000000000001"
+            "created_at": "2016-07-12 15:29:45",
+            "updated_at": "2016-07-12 15:29:45"
+        }
 
 ### Create Device [POST]
 
@@ -484,6 +587,10 @@ Relationships: `users` and `template`.
         }
 
 ### Update Device [PUT /v1/devices/{id}]
+
++ Parameters
+
+    + id (number) - ID of the device
 
 + Request (application/json)
 
