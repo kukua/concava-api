@@ -23,6 +23,14 @@ class Validator extends Model {
 		return $this->attribute->user_ids;
 	}
 
+	function duplicate ($attributeId) {
+		$validator = $this->replicate();
+		$validator->attribute_id = $attributeId;
+		$validator->push();
+
+		return $validator;
+	}
+
 	// Cast attributes to correct types
 	function getIdAttribute ($val) { return (int) $val; }
 	function getAttributeIdAttribute ($val) { return (int) $val; }

@@ -23,6 +23,14 @@ class Converter extends Model {
 		return $this->attribute->user_ids;
 	}
 
+	function duplicate ($attributeId) {
+		$converter = $this->replicate();
+		$converter->attribute_id = $attributeId;
+		$converter->push();
+
+		return $converter;
+	}
+
 	// Cast attributes to correct types
 	function getIdAttribute ($val) { return (int) $val; }
 	function getAttributeIdAttribute ($val) { return (int) $val; }

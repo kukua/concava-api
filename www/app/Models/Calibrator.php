@@ -22,6 +22,14 @@ class Calibrator extends Model {
 		return $this->attribute->user_ids;
 	}
 
+	function duplicate ($attributeId) {
+		$calibrator = $this->replicate();
+		$calibrator->attribute_id = $attributeId;
+		$calibrator->push();
+
+		return $calibrator;
+	}
+
 	// Cast attributes to correct types
 	function getIdAttribute ($val) { return (int) $val; }
 	function getAttributeIdAttribute ($val) { return (int) $val; }

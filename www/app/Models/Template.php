@@ -30,6 +30,20 @@ class Template extends Model {
 		return [(int) $this->user_id];
 	}
 
+	function duplicate () {
+		$template = $this->replicate();
+		$template->name = $template->name . ' (copy)';
+		$template->push();
+
+		$template->attributes()->saveMany($this->attributes()->get()->map(
+			function ($attribute) use ($template) {
+				return $attribute->duplicate($template->id);
+			}
+		));
+
+		return $template;
+	}
+
 	// Cast attributes to correct types
 	function getIdAttribute ($val) { return (int) $val; }
 	function getUserIdAttribute ($val) { return (int) $val; }

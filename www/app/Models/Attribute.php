@@ -44,6 +44,32 @@ class Attribute extends Model {
 		return [(int) $this->template->user_id];
 	}
 
+	function duplicate ($templateId) {
+		$attribute = $this->replicate();
+		$attribute->template_id = $templateId;
+		$attribute->push();
+
+		$attribute->converters()->saveMany($this->converters()->get()->map(
+			function ($converter) use ($attribute) {
+				return $converter->duplicate($attribute->id);
+			}
+		));
+
+		$attribute->calibrators()->saveMany($this->calibrators()->get()->map(
+			function ($calibrator) use ($attribute) {
+				return $calibrator->duplicate($attribute->id);
+			}
+		));
+
+		$attribute->validators()->saveMany($this->validators()->get()->map(
+			function ($validator) use ($attribute) {
+				return $validator->duplicate($attribute->id);
+			}
+		));
+
+		return $attribute;
+	}
+
 	// Cast attributes to correct types
 	function getIdAttribute ($val) { return (int) $val; }
 	function getTemplateIdAttribute ($val) { return (int) $val; }
