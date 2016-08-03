@@ -5,10 +5,8 @@ if ( ! function_exists('resource')) {
 		global $app;
 
 		$app->get($uri,             "$controller@index");
-		$app->get("$uri/create",    "$controller@create");
 		$app->post($uri,            "$controller@store");
 		$app->get("$uri/{id}",      "$controller@show");
-		$app->get("$uri/{id}/edit", "$controller@edit");
 		$app->put("$uri/{id}",      "$controller@update");
 		$app->patch("$uri/{id}",    "$controller@update");
 		$app->delete("$uri/{id}",   "$controller@destroy");
