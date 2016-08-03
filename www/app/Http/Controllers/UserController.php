@@ -49,7 +49,7 @@ class UserController extends Controller {
 
 		$this->addIncludes($model);
 
-		return $model;
+		return $this->findOrFail($model->id);
 	}
 
 	function login () {
