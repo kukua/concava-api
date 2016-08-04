@@ -14,6 +14,7 @@ class Validator extends Model {
 	protected $fillable = ['attribute_id', 'type', 'value', 'order'];
 	public $timestamps = true;
 	public $relationships = ['attribute'];
+	protected $touches = ['attribute'];
 
 	function attribute () {
 		return $this->belongsTo(Attribute::class);

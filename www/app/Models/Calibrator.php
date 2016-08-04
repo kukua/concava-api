@@ -13,6 +13,7 @@ class Calibrator extends Model {
 	protected $fillable = ['attribute_id', 'fn', 'order'];
 	public $timestamps = true;
 	public $relationships = ['attribute'];
+	protected $touches = ['attribute'];
 
 	function attribute () {
 		return $this->belongsTo(Attribute::class);
