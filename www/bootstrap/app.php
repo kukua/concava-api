@@ -101,7 +101,7 @@ foreach ((array) config('app.providers') as $class) {
 
 $app->group([
 	'namespace' => 'App\Http\Controllers',
-	'middleware' => ['throttle:60,1', 'cross-origin'],
+	'middleware' => ['throttle:120,1', 'cross-origin'],
 	'prefix' => 'v1',
 ], function ($app) {
 	require __DIR__.'/../app/Http/routes.php';
