@@ -41,7 +41,7 @@ class Attribute extends Model {
 	}
 
 	function getUserIdsAttribute () {
-		return [(int) $this->template->user_id];
+		return $this->template->user_ids;
 	}
 
 	function duplicate ($templateId) {

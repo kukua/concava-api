@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Request;
 use Model;
 use App\Models\Device;
+use App\Models\DeviceLabel;
 
 class DeviceController extends Controller {
 	protected $class = Device::class;
@@ -17,8 +19,39 @@ class DeviceController extends Controller {
 		$model->users()->attach($model->user_id);
 		unset($model->users);
 
+		$this->updateLabels($model);
 		$this->addIncludes($model);
 
 		return $model;
+	}
+
+	function update ($id) {
+		$model = $response = parent::update($id);
+
+		if ( ! ($model instanceof Model))
+			return $response;
+
+		$this->updateLabels($model);
+		$this->addIncludes($model);
+
+		return $model;
+	}
+
+	protected function updateLabels (Model $model) {
+		if ( ! Request::has('labels')) return;
+
+		$labels = (array) Request::input('labels');
+
+		$model->labels()->delete();
+
+		foreach ($labels as $name => & $value) {
+			DeviceLabel::create([
+				'device_id' => $model->id,
+				'name' => $name,
+				'value' => $value,
+			]);
+		}
+
+		unset($model->labels);
 	}
 }

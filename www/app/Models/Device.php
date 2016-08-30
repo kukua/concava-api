@@ -12,7 +12,7 @@ class Device extends Model {
 	];
 	protected $fillable = ['user_id', 'template_id', 'udid', 'name'];
 	public $timestamps = true;
-	public $relationships = ['users', 'template'];
+	public $relationships = ['users', 'template', 'labels'];
 
 	public $setCurrentUserIdOnCreate = true;
 	public $user_id = 0; // Used by App\Http\Controllers\DeviceController
@@ -23,6 +23,10 @@ class Device extends Model {
 
 	function template () {
 		return $this->belongsTo(Template::class);
+	}
+
+	function labels () {
+		return $this->hasMany(DeviceLabel::class);
 	}
 
 	function setUserIdAttribute ($val) {

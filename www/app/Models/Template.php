@@ -11,7 +11,7 @@ class Template extends Model {
 	];
 	protected $fillable = ['user_id', 'name'];
 	public $timestamps = true;
-	public $relationships = ['user', 'devices', 'attributes'];
+	public $relationships = ['user', 'devices', 'attributes', 'labels'];
 	public $setCurrentUserIdOnCreate = true;
 
 	function user () {
@@ -26,6 +26,10 @@ class Template extends Model {
 		return $this->hasMany(Attribute::class)->orderBy('order');
 	}
 
+	function labels () {
+		return $this->hasMany(TemplateLabel::class);
+	}
+
 	function getUserIdsAttribute () {
 		return [(int) $this->user_id];
 	}
@@ -38,6 +42,12 @@ class Template extends Model {
 		$template->attributes()->saveMany($this->attributes()->get()->map(
 			function ($attribute) use ($template) {
 				return $attribute->duplicate($template->id);
+			}
+		));
+
+		$template->labels()->saveMany($this->labels()->get()->map(
+			function ($label) use ($template) {
+				return $label->duplicate($template->id);
 			}
 		));
 
