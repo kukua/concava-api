@@ -8,6 +8,7 @@ $app->get('users/login', ['uses' => 'UserController@login']);
 resource('users', 'UserController');
 
 $app->post('devices/{id}/newMeasurementTable', ['uses' => 'MeasurementTableController@newMeasurementTable']);
+$app->post('devices/{id}/measurements', ['uses' => 'MeasurementController@storeByDeviceId']);
 resource('devices', 'DeviceController');
 
 $app->post('templates/{id}/duplicate', ['uses' => 'TemplateController@duplicate']);
