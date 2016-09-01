@@ -15,7 +15,7 @@ class UserController extends Controller {
 	protected function registerMiddleware () {
 		$this->middleware('auth.token', ['except' => ['login', 'store']]);
 		$this->middleware('auth.basic', ['only' => 'login']);
-		$this->middleware('auth.admin', ['except' => ['login', 'store']]);
+		$this->middleware('auth.admin', ['except' => ['index', 'show', 'login', 'store']]);
 	}
 
 	function store () {
