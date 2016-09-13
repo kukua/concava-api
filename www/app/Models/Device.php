@@ -21,6 +21,10 @@ class Device extends Model {
 	public $setCurrentUserIdOnCreate = true;
 	public $user_id = 0; // Used by App\Http\Controllers\DeviceController
 
+	static function scopeByUDID ($query, $udid) {
+		return $query->where('udid', $udid);
+	}
+
 	function users () {
 		return $this->belongsToMany(User::class, 'user_devices')->withTimestamps();
 	}
