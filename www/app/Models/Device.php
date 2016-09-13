@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Model;
+use App\Models\Relations\HasOneMeasurement;
 
 class Device extends Model {
 	static $rules = [
@@ -12,7 +13,7 @@ class Device extends Model {
 	];
 	protected $fillable = ['user_id', 'template_id', 'udid', 'name'];
 	public $timestamps = true;
-	public $relationships = ['users', 'template', 'labels'];
+	public $relationships = ['users', 'template', 'labels', 'measurement'];
 
 	public $setCurrentUserIdOnCreate = true;
 	public $user_id = 0; // Used by App\Http\Controllers\DeviceController
@@ -27,6 +28,10 @@ class Device extends Model {
 
 	function labels () {
 		return $this->hasMany(DeviceLabel::class);
+	}
+
+	function measurement () {
+		return new HasOneMeasurement($this);
 	}
 
 	function setUserIdAttribute ($val) {
