@@ -11,8 +11,10 @@ class Measurement extends Model {
 	static $rules = [
 		'udid' => 'required|regex:/^[a-z0-9]{16}$/',
 	];
-	protected $guarded = ['udid', 'modified'];
+	protected $guarded = ['udid', 'updated_at'];
+	protected $dates = ['updated_at'];
 	public $timestamps = false;
+
 	public $guardCreate = false;
 	public $guardUpdate = false;
 	public $guardDelete = false;
