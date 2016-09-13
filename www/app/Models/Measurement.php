@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Model;
+use App\Models\Traits\ISO8601Dates;
 
 class Measurement extends Model {
+	use ISO8601Dates;
+
 	protected $connection = 'mysql-measurements';
 	protected $table = '';
 
@@ -12,7 +15,7 @@ class Measurement extends Model {
 		'udid' => 'required|regex:/^[a-z0-9]{16}$/',
 	];
 	protected $guarded = ['udid', 'updated_at'];
-	protected $dates = ['updated_at'];
+	protected $dates = ['timestamp', 'updated_at'];
 	public $timestamps = false;
 
 	public $guardCreate = false;

@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Model;
 use App\Models\Traits\Label;
+use App\Models\Traits\ISO8601Dates;
 
 class DeviceLabel extends Model {
 	use Label;
+	use ISO8601Dates;
 
 	static $rules = [
 		'device_id' => 'required|integer',

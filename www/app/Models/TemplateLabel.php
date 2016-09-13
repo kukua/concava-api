@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Model;
 use App\Models\Traits\Label;
+use App\Models\Traits\ISO8601Dates;
 
 class TemplateLabel extends Model {
 	use Label;
+	use ISO8601Dates;
 
 	static $rules = [
 		'template_id' => 'required|integer',

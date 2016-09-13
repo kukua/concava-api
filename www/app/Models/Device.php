@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Model;
+use App\Models\Traits\ISO8601Dates;
 use App\Models\Relations\HasOneMeasurement;
 
 class Device extends Model {
+	use ISO8601Dates;
+
 	static $rules = [
 		'template_id' => 'required|integer',
 		'udid' => 'required|regex:/^[a-z0-9]{16}$/',

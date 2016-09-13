@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Model;
+use App\Models\Traits\ISO8601Dates;
 
 class Attribute extends Model {
+	use ISO8601Dates;
+
 	static $rules = [
 		'template_id' => 'required|integer',
 		'name' => 'required|max:255',

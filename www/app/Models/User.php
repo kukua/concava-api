@@ -7,6 +7,7 @@ namespace App\Models;
 use Model;
 use Hash;
 use DateTime;
+use App\Models\Traits\ISO8601Dates;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -14,6 +15,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
     use Authenticatable, CanResetPassword;
+	use ISO8601Dates;
 
 	static $rules = [
 		'name' => 'required|max:255',

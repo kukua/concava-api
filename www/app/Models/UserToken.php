@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Model;
+use App\Models\Traits\ISO8601Dates;
 
 class UserToken extends Model {
+	use ISO8601Dates;
+
 	static $rules = [
 		'user_id' => 'required|integer',
 		'token' => 'required|regex:/^[a-z0-9]{32}$/'

@@ -3,8 +3,11 @@
 namespace App\Models;
 
 use Model;
+use App\Models\Traits\ISO8601Dates;
 
 class Calibrator extends Model {
+	use ISO8601Dates;
+
 	static $rules = [
 		'attribute_id' => 'required|integer',
 		'fn' => 'required',
