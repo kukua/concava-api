@@ -26,4 +26,6 @@ mariadb:
         MYSQL_HOST:
     ports:
         - "3306:3306"
+    volumes:
+        - ./tools/create-measurements-db.sh:/docker-entrypoint-initdb.d/create-measurements-db.sh:ro
     restart: always
