@@ -21,8 +21,28 @@ class Device extends Model {
 	public $setCurrentUserIdOnCreate = true;
 	public $user_id = 0; // Used by App\Http\Controllers\DeviceController
 
+	static function isUDID ($udid) {
+		return preg_match('/^[a-zA-Z0-9]{16}$/', $udid);
+	}
+
 	static function scopeByUDID ($query, $udid) {
-		return $query->where('udid', $udid);
+		return $query->where('udid', strtolower($udid));
+	}
+
+	static function find ($id) {
+		if (static::isUDID($id)) {
+			return static::byUDID($id)->first();
+		}
+
+		return parent::find($id);
+	}
+
+	static function findOrFail ($id) {
+		if (static::isUDID($id)) {
+			return static::byUDID($id)->firstOrFail();
+		}
+
+		return parent::findOrFail($id);
 	}
 
 	function users () {

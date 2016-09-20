@@ -7,7 +7,6 @@ use Auth;
 use Model;
 use App\Models\Device;
 use App\Models\DeviceLabel;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class DeviceController extends Controller {
 	protected $class = Device::class;
@@ -28,28 +27,13 @@ class DeviceController extends Controller {
 	}
 
 	function show ($id) {
-		if (strlen($id) === 16) {
-			$model = $this->findByUDIDOrFail($id);
-		} else {
-			$model = $this->findOrFail($id);
-		}
+		$model = $this->findOrFail($id);
 
 		if ( ! in_array(Auth::id(), $model->user_ids, true)) {
 			throw new HttpException(401, 'Not allowed to read entity.');
 		}
 
 		$this->addIncludes($model);
-
-		return $model;
-	}
-
-	protected function findByUDIDOrFail ($udid) {
-		$instance = $this->instance();
-		$model = $instance->byUDID($udid)->first();
-
-		if ( ! $model) {
-			throw (new ModelNotFoundException)->setModel($this->class);
-		}
 
 		return $model;
 	}
