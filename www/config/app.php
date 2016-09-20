@@ -124,6 +124,7 @@ return [
 
 		Arubacao\BasicAuth\BasicGuardServiceProvider::class,
 		App\Providers\EventServiceProvider::class,
+		App\Providers\CarbonDateValidatorProvider::class,
 		GrahamCampbell\Throttle\ThrottleServiceProvider::class,
 
 	],

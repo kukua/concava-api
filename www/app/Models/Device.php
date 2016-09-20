@@ -5,6 +5,7 @@ namespace App\Models;
 use Model;
 use App\Models\Traits\ISO8601Dates;
 use App\Models\Relations\HasOneMeasurement;
+use App\Models\Relations\HasManyMeasurements;
 
 class Device extends Model {
 	use ISO8601Dates;
@@ -22,7 +23,7 @@ class Device extends Model {
 	public $user_id = 0; // Used by App\Http\Controllers\DeviceController
 
 	static function isUDID ($udid) {
-		return preg_match('/^[a-zA-Z0-9]{16}$/', $udid);
+		return (bool) preg_match('/^[a-zA-Z0-9]{16}$/', $udid);
 	}
 
 	static function scopeByUDID ($query, $udid) {
@@ -34,15 +35,15 @@ class Device extends Model {
 			return static::byUDID($id)->first();
 		}
 
-		return parent::find($id);
+		return call_user_func_array([static::query(), 'find'], [$id, $columns]);
 	}
 
-	static function findOrFail ($id) {
+	static function findOrFail ($id, $columns = ['*']) {
 		if (static::isUDID($id)) {
 			return static::byUDID($id)->firstOrFail();
 		}
 
-		return parent::findOrFail($id);
+		return call_user_func_array([static::query(), 'findOrFail'], [$id, $columns]);
 	}
 
 	function users () {
@@ -59,6 +60,10 @@ class Device extends Model {
 
 	function measurement () {
 		return new HasOneMeasurement($this);
+	}
+
+	function measurements () {
+		return new HasManyMeasurements($this);
 	}
 
 	function setUserIdAttribute ($val) {

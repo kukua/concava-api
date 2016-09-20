@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Model;
+use DB;
 use App\Models\Traits\ISO8601Dates;
 
 class Measurement extends Model {
@@ -24,6 +25,15 @@ class Measurement extends Model {
 
 	static function scopeByUDID ($query, $udid) {
 		return $query->from($udid);
+	}
+
+	static function scopeInterval ($query, $interval = 300) {
+		$interval = (int) $interval;
+
+		return $query
+			->addSelect(DB::raw('UNIX_TIMESTAMP(timestamp) - mod(UNIX_TIMESTAMP(timestamp), ' .
+				$interval . ') as timestamp'))
+			->groupBy(DB::raw('UNIX_TIMESTAMP(timestamp) - UNIX_TIMESTAMP(timestamp) % ' . $interval));
 	}
 
 	function setUdidAttribute ($val) {
