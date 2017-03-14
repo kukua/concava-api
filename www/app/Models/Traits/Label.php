@@ -12,6 +12,8 @@ trait Label {
 	function setValueAttribute ($val) {
 		if ($val === '' || is_null($val)) {
 			$val = '';
+		} else if (preg_match('/^[0-9\.]{17,}$/', $val)) {
+			$val = "\"$val\"";
 		} else if ( ! is_string($val)) {
 			$val = json_encode($val);
 		} else if (json_decode($val) === null) {
