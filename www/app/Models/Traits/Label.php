@@ -6,7 +6,7 @@ namespace App\Models\Traits;
 trait Label {
 	function setNameAttribute ($val) {
 		$this->attributes['name'] = $val;
-		$this->attributes['key'] = snake_case(strtr(trim($val), ' ', '_'));
+		$this->attributes['key'] = snake_case(camel_case(strtolower(trim($val))));
 	}
 
 	function setValueAttribute ($val) {
